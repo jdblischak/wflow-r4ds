@@ -9,3 +9,4 @@ editor_options:
 ---
 
 1. [Data visualization with ggplot2](01-ggplot2.html)
+1. [Workflow basics](02-workflow-basics.html)
