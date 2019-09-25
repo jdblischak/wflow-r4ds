@@ -13,9 +13,13 @@ editor_options:
 ## Setup
 
 ```{r}
-library(ggplot2)
+library(tidyverse)
+library(maps)
+library(mapproj)
 data(mpg)
 head(mpg)
+data(diamonds)
+head(diamonds)
 ```
 
 ## First steps
@@ -264,3 +268,319 @@ horizontally at a readable size on a smaller laptop screen. I personally find it
 Also, I feel like this should be informed by the importance of the x versus y axis.
 Having more columns means it will be easier to compare the y-axis values.
 And having more rows means it will be easier to compare the x-axis values.
+
+## Geometric objects
+
+p. 20
+
+> What geom would you use to draw a line chart? A boxplot? 
+>   A histogram? An area chart?
+
+* line chart - `geom_line()`
+* boxplot - `geom_boxplot()`
+* histogram - `geom_histogram()`
+* area chart - `geom_area()`
+
+> Run this code in your head and predict what the output will look like.
+    Then, run the code in R and check your predictions.
+
+Plots a separate smoothing line for each unique value of `drv` because it
+inherits the mapping from `ggplot()`.
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE)
+```
+
+Moving `color = drv` to `geom_point()` results in the points still being colored,
+but only one smoothing line.
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point(aes(color = drv)) + 
+  geom_smooth(se = FALSE)
+```
+
+> What does `show.legend = FALSE` do?  What happens if you remove it?  
+    Why do you think I used it earlier in the chapter?
+
+`show.legend = FALSE` omits the figure legend. It is useful for saving space,
+especially when showing multiple variations of a particular visualization.
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) +
+  geom_smooth(se = FALSE, show.legend = FALSE)
+```
+
+> What does the `se` argument to `geom_smooth()` do?
+
+Displays the confidence interval associated with the smoothing method applied.
+
+> Will these two graphs look different? Why/why not?
+
+No. The first uses inheritance and the second uses duplication, but they both
+result in the same data and mapping in both layers.
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  geom_smooth()
+
+ggplot() + 
+  geom_point(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_smooth(data = mpg, mapping = aes(x = displ, y = hwy))
+```
+
+> Recreate the R code necessary to generate the following graphs.
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point() +
+  geom_smooth(se = FALSE)
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point() +
+  geom_smooth(mapping = aes(group = drv), se = FALSE)
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) +
+  geom_point() +
+  geom_smooth(se = FALSE)
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth(se = FALSE)
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv)) +
+  geom_smooth(mapping = aes(linetype = drv), se = FALSE)
+
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) +
+  geom_point()
+```
+
+## Statistical transformations
+
+p. 26
+
+> What is the default geom associated with `stat_summary()`? How could
+>   you rewrite the previous plot to use that geom function instead of the 
+>   stat function?
+
+The default geom associated with `stat_summary()` is `geom_pointrange()`:
+
+```{r}
+formals(stat_summary)$geom
+```
+
+Original using `stat_summary()` with the default of `geom_pointrange()`:
+
+```{r}
+ggplot(data = diamonds) + 
+  stat_summary(
+    mapping = aes(x = cut, y = depth),
+    fun.ymin = min,
+    fun.ymax = max,
+    fun.y = median
+  )
+```
+
+Alternative using `geom_pointrange()` and specifying `stat = "summary"`:
+
+```{r}
+ggplot(data = diamonds) +
+  geom_pointrange(mapping = aes(x = cut, y = depth), stat = "summary",
+                  fun.ymin = min, fun.ymax = max, fun.y = median)
+```
+
+> What does `geom_col()` do? How is it different to `geom_bar()`?
+
+`geom_col()` uses `stat = "identity"`, so the height of the bar is equal to the exact value of `y`.
+`geom_bar()` uses `stat = "count"`, so the height of the bar is equal to the number of observations of `x`.
+
+```{r}
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(x = cut))
+```
+
+```{r}
+diamonds %>%
+  group_by(cut) %>%
+  summarize(mean_price = mean(price)) %>%
+  ggplot() +
+  geom_col(mapping = aes(x = cut, y = mean_price))
+```
+
+> Most geoms and stats come in pairs that are almost always used in 
+>   concert. Read through the documentation and make a list of all the 
+>   pairs. What do they have in common?
+
+> What variables does `stat_smooth()` compute? What parameters control
+>   its behaviour?
+
+`stat_smooth()` computes the predicted value (`y`), lower CI bound to plot (`ymin`),
+upper CI bound to plot (`ymax`), and standard error `se`.
+
+Its behavior is controlled by `method`, `formula`, and `se`. Furthermore, the
+arguments `n`, `span`, `fullrange`, `level`, and `method.args` can be passed to
+`stat_smooth()`
+
+```{r}
+p <- ggplot(data = diamonds) +
+  geom_smooth(mapping = aes(x = carat, y = price), level = 0.99) # default is 0.95
+y <- ggplot_build(p)$data[[1]]
+unique((y$ymax - y$ymin) / y$se)
+```
+
+> In our proportion bar chart, we need to set `group = 1`. Why? In other
+>    words what is the problem with these two graphs?
+
+```{r}
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(x = cut, y = ..prop..))
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = color, y = ..prop..))
+```
+
+This is strange behavior. I'm unclear why it is the default^[Apparently it is
+for [consistent behavior](https://github.com/tidyverse/ggplot2/issues/1430)].
+The proportion is calculated for each group, and thus is always equal to 1.
+
+```{r}
+p1 <- ggplot(data = diamonds) +
+  geom_bar(mapping = aes(x = cut, y = ..prop..))
+y1 <- ggplot_build(p1)$data[[1]]
+y1
+```
+
+By hardcoding `group =  1`, all the counts are treated aas part of the same
+group, and thus the proportions are from the total.
+
+```{r}
+p2 <- ggplot(data = diamonds) +
+  geom_bar(mapping = aes(x = cut, y = ..prop.., group = 1))
+y2 <- ggplot_build(p2)$data[[1]]
+y2
+```
+
+## Position adjustments
+
+p. 31
+
+> What is the problem with this plot? How could you improve it?
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) + 
+  geom_point()
+```
+
+Overplotting. Improve by jitterring the points.
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) + 
+  geom_point(position = "jitter")
+```
+
+> What parameters to `geom_jitter()` control the amount of jittering?
+
+`width` and `height`, which are passed to `position_jitter()`.
+
+> Compare and contrast `geom_jitter()` with `geom_count()`.
+
+Alternative for overplotting. `geom_count()` counts the number of points at each
+position and then maps the count to the size of the point.
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
+  geom_count()
+```
+
+Thus mapping it in combination with the `size` aesthetic is a disaster.
+
+```{r}
+table(mpg$cyl)
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) + 
+  geom_count(mapping = aes(size = cyl))
+```
+
+> What's the default position adjustment for `geom_boxplot()`? Create
+    a visualisation of the `mpg` dataset that demonstrates it.
+
+The default is to use `position_dodge2()`, which is designed specifically
+for boxplots.
+
+```{r}
+formals(geom_boxplot)$position
+```
+
+At least for this example, even when allowing variable width via `varwidth`,
+`"dodge"`is able to display the bboxplots just like `"dodge2"`.
+
+```{r}
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = class, y = hwy))
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = class, y = hwy),  varwidth = TRUE)
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = class, y = hwy),  varwidth = TRUE,
+               position = "dodge")
+```
+
+## Coordinate systems
+
+> Turn a stacked bar chart into a pie chart using `coord_polar()`.
+
+```{r}
+stacked <- ggplot(data = diamonds) +
+  geom_bar(mapping = aes(x = cut, fill = clarity))
+stacked
+stacked +  coord_polar()
+```
+
+> What does `labs()` do? Read the documentation.
+
+Adds labels like the title, subtitle, x-axis label, and y-axis label.
+
+> What's the difference between `coord_quickmap()` and `coord_map()`?
+
+`coord_map()` requires the package mapproj and projects the spherical earth onto a 2D plane.
+`coord_quickmap()` is a quicker approximation, and thus works best for areas near the equator.
+
+```{r}
+nz <- map_data("nz")
+ggplot(nz, aes(long, lat, group = group)) +
+  geom_polygon(fill = "white", colour = "black")
+ggplot(nz, aes(long, lat, group = group)) +
+  geom_polygon(fill = "white", colour = "black") +
+  coord_quickmap()
+ggplot(nz, aes(long, lat, group = group)) +
+  geom_polygon(fill = "white", colour = "black") +
+  coord_map()
+```
+
+> What does the plot below tell you about the relationship between city
+>   and highway mpg? Why is `coord_fixed()` important? What does 
+>   `geom_abline()` do?
+    
+```{r}
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
+  geom_point() + 
+  geom_abline() +
+  coord_fixed()
+```
+
+For each car, highway mpg is always better than city mpg.
+`geom_abline()` adds a line with a given slope and intercept. The default is
+the y=x line with `intercept = 0` and `slope = 1`.
+
+`coord_fixed()` maintains consistent spacing on both axes. Doing so ensures that
+the line is at a 45 degree angle, which is critical for the interpretation
+above.
+
+Removing `coord_fixed()` results in the y=x line not being at a 45 degree angle.
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
+  geom_point() + 
+  geom_abline()
+```
