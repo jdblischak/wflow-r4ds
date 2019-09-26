@@ -497,10 +497,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjdblischakwflowr4dstree3b94f62a2c1365b9b0d457973ecc62a7a0f0bbfbtargetblank3b94f62a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jdblischak/wflow-r4ds/tree/3b94f62a2c1365b9b0d457973ecc62a7a0f0bbfb" target="_blank">3b94f62</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjdblischakwflowr4dstreeb559641b451e1b255a1dcd9553fb1446c16a6c01targetblankb559641a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jdblischak/wflow-r4ds/tree/b559641b451e1b255a1dcd9553fb1446c16a6c01" target="_blank">b559641</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjdblischakwflowr4dstree3b94f62a2c1365b9b0d457973ecc62a7a0f0bbfbtargetblank3b94f62a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjdblischakwflowr4dstreeb559641b451e1b255a1dcd9553fb1446c16a6c01targetblankb559641a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -547,6 +547,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/b559641b451e1b255a1dcd9553fb1446c16a6c01/analysis/03-dplyr.Rmd" target="_blank">b559641</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-26
+</td>
+<td>
+Some more chp 3 dplyr exercises
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jdblischak/wflow-r4ds/203788b17aaefc440fcc514ee0864ac6996a2288/docs/03-dplyr.html" target="_blank">203788b</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-26
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1646,6 +1680,283 @@ John Blischak
 </div>
 <div id="group-mutates-and-filters" class="section level2">
 <h2>Group mutates (and filters)</h2>
+<blockquote>
+<p>A grouped filter is a grouped mutate followed by an ungrouped filter.</p>
+</blockquote>
+<p>This is miserable to try and reason about. I can’t imagine ever wanting to do this. I find it much more natural to use <code>summarize()</code>.</p>
+<pre class="r"><code>flights_sml &lt;- select(flights, 
+  year:day, 
+  ends_with(&quot;delay&quot;), 
+  distance, 
+  air_time
+)
+flights_sml %&gt;% 
+  group_by(year, month, day) %&gt;%
+  filter(rank(desc(arr_delay)) &lt; 10)</code></pre>
+<pre><code># A tibble: 3,306 x 7
+# Groups:   year, month, day [365]
+    year month   day dep_delay arr_delay distance air_time
+   &lt;int&gt; &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1  2013     1     1       853       851      184       41
+ 2  2013     1     1       290       338     1134      213
+ 3  2013     1     1       260       263      266       46
+ 4  2013     1     1       157       174      213       60
+ 5  2013     1     1       216       222      708      121
+ 6  2013     1     1       255       250      589      115
+ 7  2013     1     1       285       246     1085      146
+ 8  2013     1     1       192       191      199       44
+ 9  2013     1     1       379       456     1092      222
+10  2013     1     2       224       207      550       94
+# … with 3,296 more rows</code></pre>
+<pre class="r"><code>jan_1 &lt;- flights_sml %&gt;%
+  filter(year == 2013, month == 1, day == 1)
+dim(jan_1)</code></pre>
+<pre><code>[1] 842   7</code></pre>
+<pre class="r"><code>desc(jan_1$arr_delay)</code></pre>
+<pre><code>  [1]  -11  -20  -33   18   25  -12  -19   14    8   -8    2    3   -7   14
+ [15]  -31    4    8    7  -12    6    8  -16   12    8   17  -32  -14   -4
+ [29]   21    9   -3   -5   -1  -29  -10    0    3  -29  -14   19    9  -12
+ [43]  -48    5   10   18   11    9   -5    6    7    6  -11   33    9    8
+ [57]   18   -4   10  -27   23   14   -5   -2    7   -1    6    9   31  -44
+ [71]  -20   15   12  -21  -10   -5    4  -31   10  -12   -7   -3   26    1
+ [85]   -2  -30   -4   26   12  -26   -2   -7   11   -3  -10   10  -49   18
+ [99]    4    4   14    2  -33    1   30   -8    6   19   22   12   13  -10
+[113]  -12    4    0    7  -11   28   26 -137  -10  -23   -7  -17  -17   16
+[127]   14   40  -24   13    2    5  -16   -2    7  -51   13  -15   -7    8
+[141]   23   -3   13   18   24  -32  -20    8   39    9   27 -851  -19    4
+[155]    3   -9  -26   -2    2   -6   10   23   14   13    9   25    8   24
+[169]    2   -8   -3  -50   19  -40   -9    7   29   -9  -16  -21    7   30
+[183]   -4  -15  -28    5   16  -14  -27  -10    4   17   -2  -13   26   14
+[197]  -30   -9    1  -13    6    5  -42  -15   16   12   -3   -7   11   -6
+[211]   -2   16   17  -13  -12  -39  -11    0 -123    6   15   25  -39   -5
+[225]   -7   10    6  -11   -5   21   -2   10   11  -26    4  -11  -11  -32
+[239]   17   22   11  -15    6  -11  -21    1  -19   -1   11    6    9  -12
+[253]   -4   13    6    6    6   14    5    9  -13   11  -23    5   23    4
+[267]   -2   -3 -145  -78   -5  -34   -4    0    7    6  -16    4   15    4
+[281]   -3    6   -3    2   16    6   -5  -11   -8   12   -9  -29   39   13
+[295]  -22   -7   12   -1    3    5    3    4  -10    4   -7  -12   -4    8
+[309]  -24   26  -12    2    3  -38  -10  -24    4    0    9  -23  -43    6
+[323]  -27   -2   -3    6   10   -5  -23    6    0   13   -1   38  -36    0
+[337]  -16  -34  -48   -4   -5  -81    1    8    9   -4    5  -19  -53  -93
+[351]  -26    2    8  -56  -12   -3  -27  -12   -5   -2   10    3   11   18
+[365]    3   11  -43   -1   17    5  -37    0   -8  -78   23  -23   -4  -73
+[379]  -18  -21  -26  -11   14   13  -24    4   22  -46    4  -22  -27  -60
+[393]  -11  -19  -27 -103    2  -84   -6  -66  -14    6   -7   18  -26   28
+[407]  -18   11   15  -65  -15  -83  -26    9   -5  -11    8  -20   15  -15
+[421]   27    2   10  -19   22   -4  -11    2    2   18  -22   19   21    1
+[435]   22   -1  -10   17  -17  -17   17    4   -3    0    1   -3    4 -127
+[449]    1  -18   18    5   -3  -26    0  -11    3   18  -11   -5  -52   -5
+[463]  -60   12   -1   -7   -6   -3   -3  -27 -125   NA  -24   14  -27   21
+[477]  -44   NA   -6  -46    4    5  -34  -47  -19  -20  -19   24    6   17
+[491]  -35 -115   21   -8    2   -5   -8  -91 -136    8  -13  -12   -6    8
+[505]  -18   33  -16  -10    2   29   -4  -65 -123   -7   28   17  -15    4
+[519]  -12  -12   -9  -28   -6  -67   -4  -20  -78  -72  -28   23   35    3
+[533]  -18  -29  -20  -17  -23  -34   -3   -4  -15   -2  -80   40  -59   16
+[547]  -67   30  -13    4   15  -23  -14  -21  -20    8  -39  -96   -9   34
+[561]  -25  -16  -26  -56    4  -35   13    1   14  -40   -3   22    5   14
+[575]  -41  -22   32  -11  -16  -16  -44   -9   12   -6  -32  -14  -33  -68
+[589]   19   -6    8    0    6  -61  -16  -10    7   -3  -16   -3  -24   -4
+[603]   18   -3 -107    3  -14  -16   19 -123  -46   12   -3   21  -68   NA
+[617]   24  -66    2  -27    4  -10  -34    6   -4  -65  -21  -17  -51   15
+[631]   12    5  -37   -8    6    3   14   12  -37 -138  -20    2  -17   NA
+[645]   19   15  -14 -116   29 -338   -8  -18  -11   -3  -26   19    2   -3
+[659]  -14   -2   13   -9  -32   -6   -8    4    0   -7  -32  -94  -12  -25
+[673]    3 -263   -8   -2   29    7  -52   19  -78   -2    9   -1   -9   14
+[687]  -40    5   -3 -127   22    0    1    9   47   15   48   11  -10   33
+[701]   -2   12  -40  -19  -15    5   19   15   19    4    7  -18    4  -54
+[715]   -5   13  -21  -43   18    4  -81 -151  -40  -25 -166   NA    2  -12
+[729]   10 -174  -16  -14  -44   NA   11   -6    6   26   22  -11  -25   -3
+[743]  -75   16    4    9 -222   -2  -83    4 -123    4   10   -5   NA  -50
+[757]  -47    3   10    7  -10  -34  -91   14   -7  -24  -50  -45    7   35
+[771]  -12  -10   -9   17   28  -34   -3   29   28  -45    1    2   -4    5
+[785]  -44  -61    6   -5  -17  -25   -5   -9  -17    6   12   32    5   14
+[799]    6  -55  -17 -250   10 -142    2  -43  -22   24   -3    9  -28   14
+[813]   14   -2   13 -246  -21  -23  -28   26  -73 -127   -8  -49   16    7
+[827]  -49  -23  -35   -9 -191  -69  -73  -33 -456   20   24   12   NA   NA
+[841]   NA   NA</code></pre>
+<pre class="r"><code>rank(desc(jan_1$arr_delay))</code></pre>
+<pre><code>  [1] 296.5 202.0 123.5 746.5 792.0 279.0 211.0 703.5 616.5 339.5 495.5
+ [12] 512.5 352.5 703.5 132.5 534.5 616.5 601.5 279.0 580.5 616.5 239.0
+ [23] 674.0 616.5 735.5 128.5 259.5 398.0 767.5 632.5 420.5 380.0 457.0
+ [34] 137.5 313.0 468.0 512.5 137.5 259.5 758.0 632.5 279.0  79.5 558.0
+ [45] 647.5 746.5 660.5 632.5 380.0 580.5 601.5 580.5 296.5 820.0 632.5
+ [56] 616.5 746.5 398.0 647.5 149.0 781.5 703.5 380.0 443.5 601.5 457.0
+ [67] 580.5 632.5 816.0  90.0 202.0 717.5 674.0 193.5 313.0 380.0 534.5
+ [78] 132.5 647.5 279.0 352.5 420.5 797.0 480.0 443.5 134.5 398.0 797.0
+ [89] 674.0 158.5 443.5 352.5 660.5 420.5 313.0 647.5  77.0 746.5 534.5
+[100] 534.5 703.5 495.5 123.5 480.0 814.0 339.5 580.5 758.0 774.5 674.0
+[111] 688.0 313.0 279.0 534.5 468.0 601.5 296.5 805.0 797.0  15.0 313.0
+[122] 180.0 352.5 227.5 227.5 726.5 703.5 828.5 172.0 688.0 495.5 558.0
+[133] 239.0 443.5 601.5  71.5 688.0 250.0 352.5 616.5 781.5 420.5 688.0
+[144] 746.5 787.5 128.5 202.0 616.5 826.5 632.5 801.5   1.0 211.0 534.5
+[155] 512.5 327.0 158.5 443.5 495.5 365.0 647.5 781.5 703.5 688.0 632.5
+[166] 792.0 616.5 787.5 495.5 339.5 420.5  74.0 758.0 101.0 327.0 601.5
+[177] 810.0 327.0 239.0 193.5 601.5 814.0 398.0 250.0 142.0 558.0 726.5
+[188] 259.5 149.0 313.0 534.5 735.5 443.5 267.5 797.0 703.5 134.5 327.0
+[199] 480.0 267.5 580.5 558.0  97.0 250.0 726.5 674.0 420.5 352.5 660.5
+[210] 365.0 443.5 726.5 735.5 267.5 279.0 105.0 296.5 468.0  22.5 580.5
+[221] 717.5 792.0 105.0 380.0 352.5 647.5 580.5 296.5 380.0 767.5 443.5
+[232] 647.5 660.5 158.5 534.5 296.5 296.5 128.5 735.5 774.5 660.5 250.0
+[243] 580.5 296.5 193.5 480.0 211.0 457.0 660.5 580.5 632.5 279.0 398.0
+[254] 688.0 580.5 580.5 580.5 703.5 558.0 632.5 267.5 660.5 180.0 558.0
+[265] 781.5 534.5 443.5 420.5  12.0  41.5 380.0 118.0 398.0 468.0 601.5
+[276] 580.5 239.0 534.5 717.5 534.5 420.5 580.5 420.5 495.5 726.5 580.5
+[287] 380.0 296.5 339.5 674.0 327.0 137.5 826.5 688.0 187.0 352.5 674.0
+[298] 457.0 512.5 558.0 512.5 534.5 313.0 534.5 352.5 279.0 398.0 616.5
+[309] 172.0 797.0 279.0 495.5 512.5 107.0 313.0 172.0 534.5 468.0 632.5
+[320] 180.0  94.5 580.5 149.0 443.5 420.5 580.5 647.5 380.0 180.0 580.5
+[331] 468.0 688.0 457.0 825.0 111.0 468.0 239.0 118.0  79.5 398.0 380.0
+[342]  37.5 480.0 616.5 632.5 398.0 558.0 211.0  68.0  31.0 158.5 495.5
+[353] 616.5  64.5 279.0 420.5 149.0 279.0 380.0 443.5 647.5 512.5 660.5
+[364] 746.5 512.5 660.5  94.5 457.0 735.5 558.0 109.0 468.0 339.5  41.5
+[375] 781.5 180.0 398.0  46.0 219.0 193.5 158.5 296.5 703.5 688.0 172.0
+[386] 534.5 774.5  84.0 534.5 187.0 149.0  61.5 296.5 211.0 149.0  28.0
+[397] 495.5  34.0 365.0  54.5 259.5 580.5 352.5 746.5 158.5 805.0 219.0
+[408] 660.5 717.5  57.0 250.0  35.5 158.5 632.5 380.0 296.5 616.5 202.0
+[419] 717.5 250.0 801.5 495.5 647.5 211.0 774.5 398.0 296.5 495.5 495.5
+[430] 746.5 187.0 758.0 767.5 480.0 774.5 457.0 313.0 735.5 227.5 227.5
+[441] 735.5 534.5 420.5 468.0 480.0 420.5 534.5  18.0 480.0 219.0 746.5
+[452] 558.0 420.5 158.5 468.0 296.5 512.5 746.5 296.5 380.0  69.5 380.0
+[463]  61.5 674.0 457.0 352.5 365.0 420.5 420.5 149.0  20.0 832.0 172.0
+[474] 703.5 149.0 767.5  90.0 833.0 365.0  84.0 534.5 558.0 118.0  81.5
+[485] 211.0 202.0 211.0 787.5 580.5 735.5 113.0  26.0 767.5 339.5 495.5
+[496] 380.0 339.5  32.5  16.0 616.5 267.5 279.0 365.0 616.5 219.0 820.0
+[507] 239.0 313.0 495.5 810.0 398.0  57.0  22.5 352.5 805.0 735.5 250.0
+[518] 534.5 279.0 279.0 327.0 142.0 365.0  52.5 398.0 202.0  41.5  48.0
+[529] 142.0 781.5 823.5 512.5 219.0 137.5 202.0 227.5 180.0 118.0 420.5
+[540] 398.0 250.0 443.5  39.0 828.5  63.0 726.5  52.5 814.0 267.5 534.5
+[551] 717.5 180.0 259.5 193.5 202.0 616.5 105.0  29.0 327.0 822.0 166.0
+[562] 239.0 158.5  64.5 534.5 113.0 688.0 480.0 703.5 101.0 420.5 774.5
+[573] 558.0 703.5  98.0 187.0 817.5 296.5 239.0 239.0  90.0 327.0 674.0
+[584] 365.0 128.5 259.5 123.5  50.5 758.0 365.0 616.5 468.0 580.5  59.5
+[595] 239.0 313.0 601.5 420.5 239.0 420.5 172.0 398.0 746.5 420.5  27.0
+[606] 512.5 259.5 239.0 758.0  22.5  84.0 674.0 420.5 767.5  50.5 834.0
+[617] 787.5  54.5 495.5 149.0 534.5 313.0 118.0 580.5 398.0  57.0 193.5
+[628] 227.5  71.5 717.5 674.0 558.0 109.0 339.5 580.5 512.5 703.5 674.0
+[639] 109.0  14.0 202.0 495.5 227.5 835.0 758.0 717.5 259.5  25.0 810.0
+[650]   3.0 339.5 219.0 296.5 420.5 158.5 758.0 495.5 420.5 259.5 443.5
+[661] 688.0 327.0 128.5 365.0 339.5 534.5 468.0 352.5 128.5  30.0 279.0
+[672] 166.0 512.5   4.0 339.5 443.5 810.0 601.5  69.5 758.0  41.5 443.5
+[683] 632.5 457.0 327.0 703.5 101.0 558.0 420.5  18.0 774.5 468.0 480.0
+[694] 632.5 830.0 717.5 831.0 660.5 313.0 820.0 443.5 674.0 101.0 211.0
+[705] 250.0 558.0 758.0 717.5 758.0 534.5 601.5 219.0 534.5  67.0 380.0
+[716] 688.0 193.5  94.5 746.5 534.5  37.5  11.0 101.0 166.0  10.0 836.0
+[727] 495.5 279.0 647.5   9.0 239.0 259.5  90.0 837.0 660.5 365.0 580.5
+[738] 797.0 774.5 296.5 166.0 420.5  44.0 726.5 534.5 632.5   7.0 443.5
+[749]  35.5 534.5  22.5 534.5 647.5 380.0 838.0  74.0  81.5 512.5 647.5
+[760] 601.5 313.0 118.0  32.5 703.5 352.5 172.0  74.0  86.5 601.5 823.5
+[771] 279.0 313.0 327.0 735.5 805.0 118.0 420.5 810.0 805.0  86.5 480.0
+[782] 495.5 398.0 558.0  90.0  59.5 580.5 380.0 227.5 166.0 380.0 327.0
+[793] 227.5 580.5 674.0 817.5 558.0 703.5 580.5  66.0 227.5   5.0 647.5
+[804]  13.0 495.5  94.5 187.0 787.5 420.5 632.5 142.0 703.5 703.5 443.5
+[815] 688.0   6.0 193.5 180.0 142.0 797.0  46.0  18.0 339.5  77.0 726.5
+[826] 601.5  77.0 180.0 113.0 327.0   8.0  49.0  46.0 123.5   2.0 764.0
+[837] 787.5 674.0 839.0 840.0 841.0 842.0</code></pre>
+<pre class="r"><code>rank(desc(jan_1$arr_delay)) &lt; 10</code></pre>
+<pre><code>  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+ [12] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+ [23] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+ [34] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+ [45] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+ [56] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+ [67] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+ [78] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+ [89] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[100] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[111] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[122] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[133] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[144] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE
+[155] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[166] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[177] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[188] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[199] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[210] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[221] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[232] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[243] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[254] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[265] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[276] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[287] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[298] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[309] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[320] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[331] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[342] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[353] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[364] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[375] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[386] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[397] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[408] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[419] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[430] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[441] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[452] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[463] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[474] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[485] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[496] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[507] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[518] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[529] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[540] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[551] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[562] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[573] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[584] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[595] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[606] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[617] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[628] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[639] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[650]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[661] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[672] FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[683] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[694] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[705] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[716] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[727] FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[738] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE
+[749] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[760] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[771] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[782] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[793] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE
+[804] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[815] FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[826] FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE FALSE
+[837] FALSE FALSE FALSE FALSE FALSE FALSE</code></pre>
+<pre class="r"><code># OK. Starting to make sense. For each day, it keeps the 9 worst flights</code></pre>
+<pre class="r"><code>popular_dests &lt;- flights %&gt;% 
+  group_by(dest) %&gt;% 
+  filter(n() &gt; 365)
+popular_dests</code></pre>
+<pre><code># A tibble: 332,577 x 19
+# Groups:   dest [77]
+    year month   day dep_time sched_dep_time dep_delay arr_time
+   &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;
+ 1  2013     1     1      517            515         2      830
+ 2  2013     1     1      533            529         4      850
+ 3  2013     1     1      542            540         2      923
+ 4  2013     1     1      544            545        -1     1004
+ 5  2013     1     1      554            600        -6      812
+ 6  2013     1     1      554            558        -4      740
+ 7  2013     1     1      555            600        -5      913
+ 8  2013     1     1      557            600        -3      709
+ 9  2013     1     1      557            600        -3      838
+10  2013     1     1      558            600        -2      753
+# … with 332,567 more rows, and 12 more variables: sched_arr_time &lt;int&gt;,
+#   arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;,
+#   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+#   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
+<pre class="r"><code>length(unique(flights$dest))</code></pre>
+<pre><code>[1] 105</code></pre>
+<pre class="r"><code>length(unique(popular_dests$dest))</code></pre>
+<pre><code>[1] 77</code></pre>
 <p>p. 75</p>
 <blockquote>
 <p>Refer back to the lists of useful mutate and filtering functions. Describe how each operation changes when you combine it with grouping.</p>
@@ -1653,12 +1964,100 @@ John Blischak
 <blockquote>
 <p>Which plane (<code>tailnum</code>) has the worst on-time record?</p>
 </blockquote>
+<pre class="r"><code># interpretation: worst arrival delay for flights that arrived at their destination
+flights %&gt;%
+  filter(!is.na(tailnum), !is.na(arr_delay)) %&gt;%
+  group_by(tailnum) %&gt;%
+  summarize(mean_delay = mean(arr_delay)) %&gt;%
+  filter(rank(desc(mean_delay)) &lt; 10)</code></pre>
+<pre><code># A tibble: 9 x 2
+  tailnum mean_delay
+  &lt;chr&gt;        &lt;dbl&gt;
+1 N587NW        264 
+2 N654UA        185 
+3 N665MQ        175.
+4 N7715E        188 
+5 N844MH        320 
+6 N851NW        219 
+7 N911DA        294 
+8 N922EV        276 
+9 N928DN        201 </code></pre>
 <blockquote>
 <p>What time of day should you fly if you want to avoid delays as much as possible?</p>
 </blockquote>
+<p>You would want to leave before 9 AM. Solution below using <code>summarize()</code> + <code>arrange()</code>. I assume you can also do this with only <code>filter()</code>, but I don’t see the advantage.</p>
+<pre class="r"><code>not_cancelled %&gt;%
+  group_by(hour) %&gt;%
+  summarize(mean_delay = mean(arr_delay)) %&gt;%
+  arrange(mean_delay)</code></pre>
+<pre><code># A tibble: 19 x 2
+    hour mean_delay
+   &lt;dbl&gt;      &lt;dbl&gt;
+ 1     7     -5.30 
+ 2     5     -4.80 
+ 3     6     -3.38 
+ 4     9     -1.45 
+ 5     8     -1.11 
+ 6    10      0.954
+ 7    11      1.48 
+ 8    12      3.49 
+ 9    13      6.54 
+10    14      9.20 
+11    23     11.8  
+12    15     12.3  
+13    16     12.6  
+14    18     14.8  
+15    22     16.0  
+16    17     16.0  
+17    19     16.7  
+18    20     16.7  
+19    21     18.4  </code></pre>
 <blockquote>
 <p>For each destination, compute the total minutes of delay. For each flight, compute the proportion of the total delay for its destination.</p>
 </blockquote>
+<p>Total minutes of delay per destination</p>
+<pre class="r"><code>not_cancelled %&gt;%
+  filter(arr_delay &gt; 0) %&gt;%
+  group_by(dest) %&gt;%
+  summarize(total_delay = sum(arr_delay))</code></pre>
+<pre><code># A tibble: 103 x 2
+   dest  total_delay
+   &lt;chr&gt;       &lt;dbl&gt;
+ 1 ABQ          4487
+ 2 ACK          2974
+ 3 ALB          9580
+ 4 ANC            62
+ 5 ATL        300299
+ 6 AUS         39940
+ 7 AVL          3671
+ 8 BDL          6953
+ 9 BGR          6940
+10 BHM          7267
+# … with 93 more rows</code></pre>
+<p>Per flight proportion of delay per destination</p>
+<pre class="r"><code>props &lt;- not_cancelled %&gt;%
+  filter(arr_delay &gt; 0) %&gt;%
+  group_by(dest) %&gt;%
+  mutate(prop_delay = arr_delay / sum(arr_delay)) %&gt;%
+  select(flight, dest, arr_delay, prop_delay)
+props</code></pre>
+<pre><code># A tibble: 133,004 x 4
+# Groups:   dest [103]
+   flight dest  arr_delay prop_delay
+    &lt;int&gt; &lt;chr&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+ 1   1545 IAH          11  0.000111 
+ 2   1714 IAH          20  0.000201 
+ 3   1141 MIA          33  0.000235 
+ 4   1696 ORD          12  0.0000424
+ 5    507 FLL          19  0.0000938
+ 6    301 ORD           8  0.0000283
+ 7    194 LAX           7  0.0000344
+ 8    707 DFW          31  0.000282 
+ 9   4650 ATL          12  0.0000400
+10   4401 DTW          16  0.000116 
+# … with 132,994 more rows</code></pre>
+<pre class="r"><code>sum(props$prop_delay[props$dest == &quot;IAH&quot;])</code></pre>
+<pre><code>[1] 1</code></pre>
 <blockquote>
 <p>Delays are typically temporally correlated: even once the problem that caused the initial delay has been resolved, later flights are delayed to allow earlier flights to leave. Using <code>lag()</code>, explore how the delay of a flight is related to the delay of the immediately preceding flight.</p>
 </blockquote>
