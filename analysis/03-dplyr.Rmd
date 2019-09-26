@@ -123,25 +123,26 @@ NA & TRUE
 TRUE & NA
 ```
 
-The "exclusive or" logic makes less sense to me. From the docs for `?Arithmetic`:
+The exponentiation logic also makes less sense to me. Any number raised to the
+0th power is equal to 1. Furthermore, 1 raised to any power is also 1.
+From the docs for `?Arithmetic`:
 
 > 1 ^ y and y ^ 0 are 1, *always*.
 
-And that doesn't make sense to me.
-
 ```{r}
-NA ^ FALSE
-NA ^ 1
+NA ^ 0
 1 ^ NA
-1 ^ 1
-0 ^ 0
 ```
 
-While R is willing to make assumptions about logic statements, it doesn't do
-this for arithmetic, e.g. `NA * 0` is likely `0` no matter the value. I assume
-this is riskier due to potential division by zero.
+Thus the general rule seems to be to allow `NA` if the missing value would not
+affect the outcome of the logic or arithmetic operation.
+
+Thus I'm not sure why `NA * 0`  returns `NA` when it should be `0` no matter the
+value. My only guess is that it may be related to the potential risk of division
+by zero.
 
 ```{r}
+NA * 0
 0 / NA
 NA / NA * 0
 ```
