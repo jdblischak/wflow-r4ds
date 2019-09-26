@@ -466,6 +466,39 @@ Sorts by value of `n`. Can be used instead of piping to `arrange()`.
 
 ## Group mutates (and filters)
 
+> A grouped filter is a grouped mutate followed by an ungrouped filter.
+
+This is miserable to try and reason about. I can't imagine ever wanting to do
+this. I find it much more natural to use `summarize()`.
+
+```{r}
+flights_sml <- select(flights, 
+  year:day, 
+  ends_with("delay"), 
+  distance, 
+  air_time
+)
+flights_sml %>% 
+  group_by(year, month, day) %>%
+  filter(rank(desc(arr_delay)) < 10)
+jan_1 <- flights_sml %>%
+  filter(year == 2013, month == 1, day == 1)
+dim(jan_1)
+desc(jan_1$arr_delay)
+rank(desc(jan_1$arr_delay))
+rank(desc(jan_1$arr_delay)) < 10
+# OK. Starting to make sense. For each day, it keeps the 9 worst flights
+```
+
+```{r}
+popular_dests <- flights %>% 
+  group_by(dest) %>% 
+  filter(n() > 365)
+popular_dests
+length(unique(flights$dest))
+length(unique(popular_dests$dest))
+```
+
 p. 75
 
 > Refer back to the lists of useful mutate and filtering functions. 
@@ -473,17 +506,58 @@ p. 75
 
 > Which plane (`tailnum`) has the worst on-time record?
 
+```{r}
+# interpretation: worst arrival delay for flights that arrived at their destination
+flights %>%
+  filter(!is.na(tailnum), !is.na(arr_delay)) %>%
+  group_by(tailnum) %>%
+  summarize(mean_delay = mean(arr_delay)) %>%
+  filter(rank(desc(mean_delay)) < 10)
+```
+
 > What time of day should you fly if you want to avoid delays as much
     as possible?
-    
+
+You would want to leave before 9 AM. Solution below using `summarize()` +
+`arrange()`. I assume you can also do this with only `filter()`, but I don't
+see the advantage.
+
+```{r}
+not_cancelled %>%
+  group_by(hour) %>%
+  summarize(mean_delay = mean(arr_delay)) %>%
+  arrange(mean_delay)
+```
+
 > For each destination, compute the total minutes of delay. For each 
     flight, compute the proportion of the total delay for its destination.
-    
+
+Total minutes of delay per destination
+
+```{r}
+not_cancelled %>%
+  filter(arr_delay > 0) %>%
+  group_by(dest) %>%
+  summarize(total_delay = sum(arr_delay))
+```
+
+Per flight proportion of delay per destination
+
+```{r}
+props <- not_cancelled %>%
+  filter(arr_delay > 0) %>%
+  group_by(dest) %>%
+  mutate(prop_delay = arr_delay / sum(arr_delay)) %>%
+  select(flight, dest, arr_delay, prop_delay)
+props
+sum(props$prop_delay[props$dest == "IAH"])
+```
+
 > Delays are typically temporally correlated: even once the problem that
     caused the initial delay has been resolved, later flights are delayed 
     to allow earlier flights to leave. Using `lag()`, explore how the delay
     of a flight is related to the delay of the immediately preceding flight.
-    
+
 > Look at each destination. Can you find flights that are suspiciously
     fast? (i.e. flights that represent a potential data entry error). Compute
     the air time a flight relative to the shortest flight to that destination.
