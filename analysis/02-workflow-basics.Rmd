@@ -7,12 +7,14 @@ editor_options:
   chunk_output_type: console
 ---
 
+* [Book chapter](https://r4ds.had.co.nz/workflow-basics.html)
+* [Source](https://github.com/hadley/r4ds/blob/master/workflow-basics.Rmd)
+
 ## Setup
 
 ```{r}
 library(tidyverse)
 ```
-
 
 ## Exercises
 
