@@ -1,0 +1,234 @@
+---
+title: "Data transformation with dplyr"
+author: "John Blischak"
+date: "2019-09-26"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+* [Book chapter](https://r4ds.had.co.nz/transform.html)
+* [Source](https://github.com/hadley/r4ds/blob/master/transform.Rmd)
+
+## Setup
+
+```{r}
+library(nycflights13)
+library(tidyverse)
+```
+
+## Filter rows with `filter()`
+
+p. 49
+
+> Find all flights that
+
+> Had an arrival delay of two or more hours
+    
+```{r}
+filter(flights, arr_delay > 2 * 60)
+```
+    
+> Flew to Houston (`IAH` or `HOU`)
+    
+```{r}
+filter(flights, dest == "IAH" | dest == "HOU")
+```
+
+> Were operated by United, American, or Delta
+    
+```{r}
+filter(flights, carrier %in% c("UA", "AA", "DL"))
+```
+
+> Departed in summer (July, August, and September)
+        
+```{r}
+filter(flights, month %in% 7:9)
+```
+
+> Arrived more than two hours late, but didn't leave late
+        
+```{r}
+filter(flights, arr_delay > 2 * 60, dep_delay <=0)
+```
+
+> Were delayed by at least an hour, but made up over 30 minutes in flight
+        
+```{r}
+filter(flights, dep_delay >= 60, arr_delay < 30)
+```
+
+> Departed between midnight and 6am (inclusive)
+    
+```{r}
+filter(flights, hour <= 6)
+```
+
+> Another useful dplyr filtering helper is `between()`. What does it do?
+    Can you use it to simplify the code needed to answer the previous 
+    challenges?
+
+`between()` selects numeric values between a minimum and maximum value (inclusive).
+
+While I think `between()` is useful, I don't find these examples very compelling.
+
+```{r}
+filter(flights, between(month, 7, 9))
+filter(flights, between(hour, 0, 6))
+```
+
+> How many flights have a missing `dep_time`? What other variables are 
+    missing? What might these rows represent?
+
+```{r}
+filter(flights, is.na(dep_time))
+```
+
+I assume these are cancelled flights since all columns relating to departure and
+arrival times are missing.
+
+> Why is `NA ^ 0` not missing? Why is `NA | TRUE` not missing?
+    Why is `FALSE & NA` not missing? Can you figure out the general
+    rule?  (`NA * 0` is a tricky counterexample!)
+
+```{r}
+NA ^ 0 # same as NA ^ FALSE
+NA | TRUE
+FALSE & NA
+NA * 0
+```
+
+I think the `NA | TRUE` and `FALSE & NA` make sense. They are short-circuitng
+the logic. For an "or" statement, a `TRUE` on one of the sides is sufficient to
+render the entire statement true, regardless if the other data is missing. Vice
+verse for the "and": a `FALSE` on either side is sufficient to make the entire
+statement false.
+
+```{r}
+# have to be TRUE
+NA | TRUE
+TRUE | NA
+# ambiguous
+NA | FALSE
+FALSE | NA
+```
+
+```{r}
+# have to be TRUE
+NA & FALSE
+FALSE & NA
+# ambiguous
+NA & TRUE
+TRUE & NA
+```
+
+The "exclusive or" logic makes less sense to me. From the docs for `?Arithmetic`:
+
+> 1 ^ y and y ^ 0 are 1, *always*.
+
+And that doesn't make sense to me.
+
+```{r}
+NA ^ FALSE
+NA ^ 1
+1 ^ NA
+1 ^ 1
+0 ^ 0
+```
+
+While R is willing to make assumptions about logic statements, it doesn't do
+this for arithmetic, e.g. `NA * 0` is likely `0` no matter the value. I assume
+this is riskier due to potential division by zero.
+
+```{r}
+0 / NA
+NA / NA * 0
+```
+
+## Arrange rows with `arrange()`
+
+p. 51
+
+> How could you use `arrange()` to sort all missing values to the start?
+>   (Hint: use `is.na()`).
+
+```{r}
+arrange(flights, desc(is.na(dep_time)))
+```
+
+> Sort `flights` to find the most delayed flights. Find the flights that
+    left earliest.
+
+```{r}
+arrange(flights, desc(dep_delay))
+arrange(flights, hour, minute) # left earliest in the AM
+arrange(flights, dep_delay) # left earliest in relation to scheduled dep time
+```
+
+> Sort `flights` to find the fastest flights.
+
+```{r}
+arrange(flights, air_time)
+```
+
+> Which flights travelled the longest? Which travelled the shortest?
+
+```{r}
+arrange(flights, desc(distance))
+arrange(flights, distance)
+```
+
+## Select columns with `select()`
+
+p. 54
+
+> Brainstorm as many ways as possible to select `dep_time`, `dep_delay`,
+    `arr_time`, and `arr_delay` from `flights`.
+
+```{r}
+select(flights, dep_time, dep_delay, arr_time, arr_delay)
+select(flights, dep_time, dep_delay:arr_time, arr_delay)
+select(flights, starts_with("dep"), starts_with("arr"))
+select(flights, dep_time, arr_time, ends_with("delay"))
+```
+
+> What happens if you include the name of a variable multiple times in
+    a `select()` call?
+
+The column is added in the first place it is mentioned:
+
+```{r}
+select(flights, dep_time, dep_time)
+select(flights, dep_time, arr_time, dep_time)
+```
+
+> What does the `one_of()` function do? Why might it be helpful in conjunction
+    with this vector?
+
+From docs:
+
+> `one_of()`: Matches variable names in a character vector.
+
+Thus it serves a similar purpose as `%in%`. But `%in%` returns a logical vector (which could be used in `filter()`), whereas, `select()` accepts the integer position of the columns:
+
+```{r}
+vars <- c("year", "month", "day", "dep_delay", "arr_delay")
+select(flights, one_of(vars))
+# This would be how to replace one_of()
+select(flights, which(colnames(flights) %in% vars))
+```
+
+> Does the result of running the following code surprise you?  How do the
+    select helpers deal with case by default? How can you change that default?
+
+```{r}
+select(flights, contains("TIME"))
+```
+
+The tidyselect helpers ignore case by default (`ignore.case = TRUE`):
+
+```{r}
+formals(contains)$ignore.case
+select(flights, contains("TIME", ignore.case = FALSE))
+```
