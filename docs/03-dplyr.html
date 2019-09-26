@@ -497,10 +497,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjdblischakwflowr4dstreeace5f599a233a886fe2490c6c03ec3f762c1f5b5targetblankace5f59a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jdblischak/wflow-r4ds/tree/ace5f599a233a886fe2490c6c03ec3f762c1f5b5" target="_blank">ace5f59</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjdblischakwflowr4dstree3b94f62a2c1365b9b0d457973ecc62a7a0f0bbfbtargetblank3b94f62a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jdblischak/wflow-r4ds/tree/3b94f62a2c1365b9b0d457973ecc62a7a0f0bbfb" target="_blank">3b94f62</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjdblischakwflowr4dstreeace5f599a233a886fe2490c6c03ec3f762c1f5b5targetblankace5f59a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjdblischakwflowr4dstree3b94f62a2c1365b9b0d457973ecc62a7a0f0bbfbtargetblank3b94f62a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -547,6 +547,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/3b94f62a2c1365b9b0d457973ecc62a7a0f0bbfb/analysis/03-dplyr.Rmd" target="_blank">3b94f62</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-26
+</td>
+<td>
+R is not C! ^ is exponentiation, not ‘exclusive or’
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jdblischak/wflow-r4ds/332efa00414e2ba621cf48e1370f1673212be4f3/docs/03-dplyr.html" target="_blank">332efa0</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-26
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -870,22 +904,18 @@ NA &amp; TRUE</code></pre>
 <pre><code>[1] NA</code></pre>
 <pre class="r"><code>TRUE &amp; NA</code></pre>
 <pre><code>[1] NA</code></pre>
-<p>The “exclusive or” logic makes less sense to me. From the docs for <code>?Arithmetic</code>:</p>
+<p>The exponentiation logic also makes less sense to me. Any number raised to the 0th power is equal to 1. Furthermore, 1 raised to any power is also 1. From the docs for <code>?Arithmetic</code>:</p>
 <blockquote>
 <p>1 ^ y and y ^ 0 are 1, <em>always</em>.</p>
 </blockquote>
-<p>And that doesn’t make sense to me.</p>
-<pre class="r"><code>NA ^ FALSE</code></pre>
+<pre class="r"><code>NA ^ 0</code></pre>
 <pre><code>[1] 1</code></pre>
-<pre class="r"><code>NA ^ 1</code></pre>
-<pre><code>[1] NA</code></pre>
 <pre class="r"><code>1 ^ NA</code></pre>
 <pre><code>[1] 1</code></pre>
-<pre class="r"><code>1 ^ 1</code></pre>
-<pre><code>[1] 1</code></pre>
-<pre class="r"><code>0 ^ 0</code></pre>
-<pre><code>[1] 1</code></pre>
-<p>While R is willing to make assumptions about logic statements, it doesn’t do this for arithmetic, e.g. <code>NA * 0</code> is likely <code>0</code> no matter the value. I assume this is riskier due to potential division by zero.</p>
+<p>Thus the general rule seems to be to allow <code>NA</code> if the missing value would not affect the outcome of the logic or arithmetic operation.</p>
+<p>Thus I’m not sure why <code>NA * 0</code> returns <code>NA</code> when it should be <code>0</code> no matter the value. My only guess is that it may be related to the potential risk of division by zero.</p>
+<pre class="r"><code>NA * 0</code></pre>
+<pre><code>[1] NA</code></pre>
 <pre class="r"><code>0 / NA</code></pre>
 <pre><code>[1] NA</code></pre>
 <pre class="r"><code>NA / NA * 0</code></pre>
@@ -1529,6 +1559,43 @@ not_cancelled %&gt;% count(dest)</code></pre>
   geom_smooth()</code></pre>
 <pre><code>`geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
 <p><img src="figure/03-dplyr.Rmd/unnamed-chunk-39-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-39-1">
+Past versions of unnamed-chunk-39-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-39-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/332efa00414e2ba621cf48e1370f1673212be4f3/docs/figure/03-dplyr.Rmd/unnamed-chunk-39-1.png" target="_blank">332efa0</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>There is a slight pattern, but it’s mostly driven by the days where the average delay is greater than 10 minutes.</p>
 <blockquote>
 <p>Which carrier has the worst delays? Challenge: can you disentangle the effects of bad airports vs. bad carriers? Why/why not? (Hint: think about <code>flights %&gt;% group_by(carrier, dest) %&gt;% summarise(n())</code>)</p>
