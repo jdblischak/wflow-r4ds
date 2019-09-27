@@ -468,8 +468,8 @@ Sorts by value of `n`. Can be used instead of piping to `arrange()`.
 
 > A grouped filter is a grouped mutate followed by an ungrouped filter.
 
-This is miserable to try and reason about. I can't imagine ever wanting to do
-this. I find it much more natural to use `summarize()`.
+Group filters are miserable to try and reason about. I can't imagine ever
+wanting to use them. I find it much more natural to use `summarize()`.
 
 ```{r}
 flights_sml <- select(flights, 
