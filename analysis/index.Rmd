@@ -12,6 +12,6 @@ editor_options:
 1. [Workflow basics](02-workflow-basics.html)
 1. [Data transformation with dplyr](03-dplyr.html)
 1. Workflow: Scripts (no exercises)
-1. [Exploratory data analysis](05-eda.Rmd)
+1. [Exploratory data analysis](05-eda.html)
 1. Workflow: Projects (no exercises)
 1. [Tibbles with tibble](07-tibble.html)
