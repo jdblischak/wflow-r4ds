@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="John Blischak" />
+
+<meta name="date" content="2019-09-27" />
+
+<title>Exploratory data analysis</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">wflow-r4ds</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/jdblischak/wflow-r4ds">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Exploratory data analysis</h1>
+<h4 class="author">John Blischak</h4>
+<h4 class="date">2019-09-27</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2019-09-27
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>wflow-r4ds/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.4.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20190925code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20190925)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20190925code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20190925)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjdblischakwflowr4dstree874ad3b0989a95ce91782f21e50b8d8141d3ead0targetblank874ad3ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jdblischak/wflow-r4ds/tree/874ad3b0989a95ce91782f21e50b8d8141d3ead0" target="_blank">874ad3b</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjdblischakwflowr4dstree874ad3b0989a95ce91782f21e50b8d8141d3ead0targetblank874ad3ba" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the R Markdown and HTML files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view them.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/874ad3b0989a95ce91782f21e50b8d8141d3ead0/analysis/05-eda.Rmd" target="_blank">874ad3b</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+<td>
+chp 5 exploratory data analysis
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<ul>
+<li><a href="https://r4ds.had.co.nz/exploratory-data-analysis.html">Book chapter</a></li>
+<li><a href="https://github.com/hadley/r4ds/blob/master/EDA.Rmd">Source</a></li>
+</ul>
+<div id="setup" class="section level2">
+<h2>Setup</h2>
+<pre class="r"><code>library(nycflights13)
+library(tidyverse)
+data(diamonds)
+library(ggstance)
+library(lvplot)
+library(ggbeeswarm)</code></pre>
+</div>
+<div id="variation" class="section level2">
+<h2>Variation</h2>
+<p>p. 90</p>
+<ol style="list-style-type: decimal">
+<li>Explore the distribution of each of the <code>x</code>, <code>y</code>, and <code>z</code> variables in <code>diamonds</code>. What do you learn? Think about a diamond and how you might decide which dimension is the length, width, and depth.</li>
+</ol>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = x)) +
+  geom_histogram()</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = y)) +
+  geom_histogram()</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-1-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = z)) +
+  geom_histogram()</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-1-3.png" width="672" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: decimal">
+<li>Explore the distribution of <code>price</code>. Do you discover anything unusual or surprising? (Hint: Carefully think about the <code>binwidth</code> and make sure you try a wide range of values.)</li>
+</ol>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = price)) +
+  geom_histogram(binwidth = 10)</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = price)) +
+  geom_histogram(binwidth = 100)</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = price)) +
+  geom_histogram(binwidth = 1000)</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-2-3.png" width="672" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: decimal">
+<li>How many diamonds are 0.99 carat? How many are 1 carat? What do you think is the cause of the difference?</li>
+</ol>
+<pre class="r"><code>diamonds %&gt;%
+  filter(between(carat, 0.99, 1)) %&gt;%
+  count(carat)</code></pre>
+<pre><code># A tibble: 2 x 2
+  carat     n
+  &lt;dbl&gt; &lt;int&gt;
+1  0.99    23
+2  1     1558</code></pre>
+<ol style="list-style-type: decimal">
+<li>Compare and contrast <code>coord_cartesian()</code> vs <code>xlim()</code> or <code>ylim()</code> when zooming in on a histogram. What happens if you leave <code>binwidth</code> unset? What happens if you try and zoom so only half a bar shows?</li>
+</ol>
+<p>Using <code>coord_cartesian()</code> zooms into the existing plot. Thus the bin width does not change. Using <code>xlim()</code> changes the binwidth because it changes the number of observations. Using <code>ylim()</code> removes data because the bars that go above 1000 are removed from the final plot.</p>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = y)) +
+  geom_histogram()</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = y)) +
+  geom_histogram() +
+  xlim(5, 10)</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<pre><code>Warning: Removed 17576 rows containing non-finite values (stat_bin).</code></pre>
+<pre><code>Warning: Removed 2 rows containing missing values (geom_bar).</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = y)) +
+  geom_histogram() +
+  ylim(0, 1000)</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<pre><code>Warning: Removed 3 rows containing missing values (geom_bar).</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-4-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = y)) +
+  geom_histogram() +
+  coord_cartesian(xlim = c(5, 10))</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-4-4.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = y)) +
+  geom_histogram() +
+  coord_cartesian(ylim = c(0, 1000))</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-4-5.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="missing-values" class="section level2">
+<h2>Missing values</h2>
+<p>p. 93</p>
+<ol style="list-style-type: decimal">
+<li>What happens to missing values in a histogram? What happens to missing values in a bar chart? Why is there a difference?</li>
+</ol>
+<p><code>geom_histogram()</code> removes missing values numeric variables:</p>
+<pre class="r"><code>d &lt;- data.frame(x = c(1, 1, 2, 2, NA, 3))
+ggplot(data = d, mapping = aes(x = x)) +
+  geom_histogram()</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<pre><code>Warning: Removed 1 rows containing non-finite values (stat_bin).</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><code>geom_bar()</code> keeps missing values for non-numeric variables:</p>
+<pre class="r"><code>d &lt;- data.frame(x = c(&quot;a&quot;, &quot;a&quot;, &quot;b&quot;, &quot;b&quot;, NA, &quot;c&quot;))
+ggplot(data = d, mapping = aes(x = x)) +
+  geom_bar()</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>An edge case is integers. They are treated as numeric and have missing values removed. To treat them as discrete, they need to be converted to a factor:</p>
+<pre class="r"><code>d &lt;- data.frame(x = c(1, 1, 2, 2, NA, 3))
+ggplot(data = d, mapping = aes(x = x)) +
+  geom_bar()</code></pre>
+<pre><code>Warning: Removed 1 rows containing non-finite values (stat_count).</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>d$x &lt;- factor(d$x)
+ggplot(data = d, mapping = aes(x = x)) +
+  geom_bar()</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-7-2.png" width="672" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: decimal">
+<li>What does <code>na.rm = TRUE</code> do in <code>mean()</code> and <code>sum()</code>?</li>
+</ol>
+<p>Missing values are removed prior to performing the calculation.</p>
+</div>
+<div id="covariation---a-categorical-and-continuous-variable" class="section level2">
+<h2>Covariation - A categorical and continuous variable</h2>
+<p>p. 99</p>
+<ol style="list-style-type: decimal">
+<li>Use what you’ve learned to improve the visualisation of the departure times of cancelled vs. non-cancelled flights.</li>
+</ol>
+<p>Plot the density values:</p>
+<pre class="r"><code>nycflights13::flights %&gt;% 
+  mutate(
+    cancelled = is.na(dep_time),
+    sched_hour = sched_dep_time %/% 100,
+    sched_min = sched_dep_time %% 100,
+    sched_dep_time = sched_hour + sched_min / 60
+  ) %&gt;% 
+  ggplot(mapping = aes(sched_dep_time)) + 
+    geom_freqpoly(mapping = aes(y = ..density.., colour = cancelled), binwidth = 1/4)</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>I prefer the version with <code>geom_density()</code>:</p>
+<pre class="r"><code>nycflights13::flights %&gt;% 
+  mutate(
+    cancelled = is.na(dep_time),
+    sched_hour = sched_dep_time %/% 100,
+    sched_min = sched_dep_time %% 100,
+    sched_dep_time = sched_hour + sched_min / 60
+  ) %&gt;% 
+  ggplot(mapping = aes(sched_dep_time)) + 
+    geom_density(mapping = aes(colour = cancelled), bw = 1/4)</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: decimal">
+<li>What variable in the diamonds dataset is most important for predicting the price of a diamond? How is that variable correlated with cut? Why does the combination of those two relationships lead to lower quality diamonds being more expensive?</li>
+</ol>
+<p>carat is the most important for predicting price.</p>
+<pre class="r"><code>summary(lm(price ~ ., data = diamonds))</code></pre>
+<pre><code>
+Call:
+lm(formula = price ~ ., data = diamonds)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-21376.0   -592.4   -183.5    376.4  10694.2 
+
+Coefficients:
+             Estimate Std. Error  t value Pr(&gt;|t|)    
+(Intercept)  5753.762    396.630   14.507  &lt; 2e-16 ***
+carat       11256.978     48.628  231.494  &lt; 2e-16 ***
+cut.L         584.457     22.478   26.001  &lt; 2e-16 ***
+cut.Q        -301.908     17.994  -16.778  &lt; 2e-16 ***
+cut.C         148.035     15.483    9.561  &lt; 2e-16 ***
+cut^4         -20.794     12.377   -1.680  0.09294 .  
+color.L     -1952.160     17.342 -112.570  &lt; 2e-16 ***
+color.Q      -672.054     15.777  -42.597  &lt; 2e-16 ***
+color.C      -165.283     14.725  -11.225  &lt; 2e-16 ***
+color^4        38.195     13.527    2.824  0.00475 ** 
+color^5       -95.793     12.776   -7.498 6.59e-14 ***
+color^6       -48.466     11.614   -4.173 3.01e-05 ***
+clarity.L    4097.431     30.259  135.414  &lt; 2e-16 ***
+clarity.Q   -1925.004     28.227  -68.197  &lt; 2e-16 ***
+clarity.C     982.205     24.152   40.668  &lt; 2e-16 ***
+clarity^4    -364.918     19.285  -18.922  &lt; 2e-16 ***
+clarity^5     233.563     15.752   14.828  &lt; 2e-16 ***
+clarity^6       6.883     13.715    0.502  0.61575    
+clarity^7      90.640     12.103    7.489 7.06e-14 ***
+depth         -63.806      4.535  -14.071  &lt; 2e-16 ***
+table         -26.474      2.912   -9.092  &lt; 2e-16 ***
+x           -1008.261     32.898  -30.648  &lt; 2e-16 ***
+y               9.609     19.333    0.497  0.61918    
+z             -50.119     33.486   -1.497  0.13448    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1130 on 53916 degrees of freedom
+Multiple R-squared:  0.9198,    Adjusted R-squared:  0.9198 
+F-statistic: 2.688e+04 on 23 and 53916 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Lower quality cuts have higher carat values.</p>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = cut, y = carat)) +
+  geom_boxplot()</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>And since a higher carat gets a higher price, lower cuts tend to be more expensive on average.</p>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = carat, y = price)) +
+  geom_point(alpha = 0.5) +
+  facet_wrap(~ cut)</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: decimal">
+<li>Install the ggstance package, and create a horizontal boxplot. How does this compare to using <code>coord_flip()</code>?</li>
+</ol>
+<p>Have to switch <code>x</code> and <code>y</code> aesthetics:</p>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = cut, y = carat)) +
+  geom_boxplot() +
+  coord_flip()</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = carat, y = cut)) +
+  ggstance::geom_boxploth()</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-13-2.png" width="672" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: decimal">
+<li>One problem with boxplots is that they were developed in an era of much smaller datasets and tend to display a prohibitively large number of “outlying values”. One approach to remedy this problem is the letter value plot. Install the lvplot package, and try using <code>geom_lv()</code> to display the distribution of price vs cut. What do you learn? How do you interpret the plots?</li>
+</ol>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = cut, y = price)) +
+  lvplot::geom_lv()</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: decimal">
+<li>Compare and contrast <code>geom_violin()</code> with a facetted <code>geom_histogram()</code>, or a coloured <code>geom_freqpoly()</code>. What are the pros and cons of each method?</li>
+</ol>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = cut, y = price)) +
+  geom_violin()</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = price)) +
+  geom_histogram() +
+  facet_wrap(~ cut)</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-15-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = price)) +
+  geom_freqpoly(mapping = aes(color = cut))</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-15-3.png" width="672" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: decimal">
+<li>If you have a small dataset, it’s sometimes useful to use <code>geom_jitter()</code> to see the relationship between a continuous and categorical variable. The ggbeeswarm package provides a number of methods similar to <code>geom_jitter()</code>. List them and briefly describe what each one does.</li>
+</ol>
+<pre class="r"><code>ggplot(data = diamonds[sample(seq_len(nrow(diamonds)), 1000), ],
+       mapping = aes(x = cut, y = price)) +
+  ggbeeswarm::geom_beeswarm()</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="covariation---two-categorical-variables" class="section level2">
+<h2>Covariation - Two categorical variables</h2>
+<p>p. 101</p>
+<ol style="list-style-type: decimal">
+<li>How could you rescale the count dataset above to more clearly show the distribution of cut within colour, or colour within cut?</li>
+</ol>
+<p>Use a grouped mutate to calculate proportion of each cut within each color.</p>
+<pre class="r"><code>diamonds %&gt;% 
+  count(color, cut) %&gt;%
+  group_by(color) %&gt;%
+  mutate(prop = n / sum(n)) %&gt;%
+  ggplot(mapping = aes(x = color, y = cut)) +
+    geom_tile(mapping = aes(fill = prop))</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: decimal">
+<li>Use <code>geom_tile()</code> together with dplyr to explore how average flight delays vary by destination and month of year. What makes the plot difficult to read? How could you improve it?</li>
+</ol>
+<p>Only including non-cancelled flights with delayed arrivals.</p>
+<pre class="r"><code>flights %&gt;%
+  filter(!is.na(dep_delay), !is.na(arr_delay), arr_delay &gt; 0) %&gt;%
+  select(dest, month, arr_delay) %&gt;%
+  group_by(dest, month) %&gt;%
+  summarize(delay = mean(arr_delay)) %&gt;%
+  ggplot(mapping = aes(x = as.factor(month), y = dest)) +
+  geom_tile(mapping = aes(fill = delay))</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: decimal">
+<li>Why is it slightly better to use <code>aes(x = color, y = cut)</code> rather than <code>aes(x = cut, y = color)</code> in the example above?</li>
+</ol>
+<p>Putting longer variable values on y-axis ensure that the axis labels don’t overlap.</p>
+<pre class="r"><code>diamonds %&gt;% 
+  count(color, cut) %&gt;%  
+  ggplot(mapping = aes(x = color, y = cut)) +
+    geom_tile(mapping = aes(fill = n))</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>diamonds %&gt;% 
+  count(color, cut) %&gt;%  
+  ggplot(mapping = aes(x = cut, y = color)) +
+    geom_tile(mapping = aes(fill = n))</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-19-2.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="covariation---two-continuous-variables" class="section level2">
+<h2>Covariation - Two continuous variables</h2>
+<pre class="r"><code>smaller &lt;- diamonds %&gt;% 
+  filter(carat &lt; 3)
+ggplot(data = smaller, mapping = aes(x = carat, y = price)) + 
+  geom_boxplot(mapping = aes(group = cut_width(carat, 0.1)), varwidth = TRUE)</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(data = smaller, mapping = aes(x = carat, y = price)) + 
+  geom_boxplot(mapping = aes(group = cut_number(carat, 20)))</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-20-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>I think the above plot is confusing. The use of <code>cut_number()</code> puts a fairly equal number of observations in each bin. However, because <code>carat</code> is mapped to <code>x</code>, the width of the bin corresponds to the width on the x-axis, not the number of observations (as is done with <code>varwidth = TRUE</code>).</p>
+<pre class="r"><code>table(cut_number(diamonds$carat, 20))</code></pre>
+<pre><code>
+  [0.2,0.3]  (0.3,0.31] (0.31,0.32] (0.32,0.35]  (0.35,0.4]  (0.4,0.42] 
+       4203        2249        1840        2766        3333        2088 
+ (0.42,0.5]  (0.5,0.53]  (0.53,0.6]   (0.6,0.7]  (0.7,0.73]  (0.73,0.9] 
+       2453        2653        2863        2714        2550        3890 
+    (0.9,1]    (1,1.01] (1.01,1.04] (1.04,1.13] (1.13,1.24] (1.24,1.51] 
+       2836        2242        1881        2692        2820        3232 
+ (1.51,1.7]  (1.7,5.01] 
+       1950        2685 </code></pre>
+<p>p. 105</p>
+<ol style="list-style-type: decimal">
+<li>Instead of summarising the conditional distribution with a boxplot, you could use a frequency polygon. What do you need to consider when using <code>cut_width()</code> vs <code>cut_number()</code>? How does that impact a visualisation of the 2d distribution of <code>carat</code> and <code>price</code>?</li>
+</ol>
+<p>With <code>cut_width()</code>, the number of observations in each bin may vary substantially; whereas, with <code>cut_number()</code>, each bin will have a similar number of observations.</p>
+<pre class="r"><code># cut_interval makes n groups with equal range
+table(cut_interval(diamonds$price, n = 10))</code></pre>
+<pre><code>
+     [326,2.18e+03] (2.18e+03,4.03e+03] (4.03e+03,5.88e+03] 
+              25335                9328                7393 
+(5.88e+03,7.72e+03] (7.72e+03,9.57e+03] (9.57e+03,1.14e+04] 
+               3878                2364                1745 
+(1.14e+04,1.33e+04] (1.33e+04,1.51e+04]  (1.51e+04,1.7e+04] 
+               1306                1002                 863 
+ (1.7e+04,1.88e+04] 
+                726 </code></pre>
+<pre class="r"><code># cut_number makes n groups with (approximately) equal numbers of observations
+table(cut_number(diamonds$price, n = 10))</code></pre>
+<pre><code>
+          [326,646]           (646,837]      (837,1.09e+03] 
+               5411                5385                5396 
+ (1.09e+03,1.7e+03]   (1.7e+03,2.4e+03]  (2.4e+03,3.46e+03] 
+               5388                5405                5384 
+(3.46e+03,4.66e+03]  (4.66e+03,6.3e+03]  (6.3e+03,9.82e+03] 
+               5394                5389                5395 
+(9.82e+03,1.88e+04] 
+               5393 </code></pre>
+<pre class="r"><code># cut_width makes groups of width width.
+table(cut_width(diamonds$price, width = 1000))</code></pre>
+<pre><code>
+         [-500,500]       (500,1.5e+03]   (1.5e+03,2.5e+03] 
+               1749               18261                7532 
+  (2.5e+03,3.5e+03]   (3.5e+03,4.5e+03]   (4.5e+03,5.5e+03] 
+               4958                4535                3950 
+  (5.5e+03,6.5e+03]   (6.5e+03,7.5e+03]   (7.5e+03,8.5e+03] 
+               2627                1946                1395 
+  (8.5e+03,9.5e+03]  (9.5e+03,1.05e+04] (1.05e+04,1.15e+04] 
+               1253                1000                 899 
+(1.15e+04,1.25e+04] (1.25e+04,1.35e+04] (1.35e+04,1.45e+04] 
+                721                 655                 576 
+(1.45e+04,1.55e+04] (1.55e+04,1.65e+04] (1.65e+04,1.75e+04] 
+                482                 471                 437 
+(1.75e+04,1.85e+04] (1.85e+04,1.95e+04] 
+                391                 102 </code></pre>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = carat)) +
+  geom_freqpoly(mapping = aes(color = cut_width(price, width = 1000)))</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = carat)) +
+  geom_freqpoly(mapping = aes(color = cut_number(price, n = 10)))</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-23-2.png" width="672" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: decimal">
+<li>Visualise the distribution of carat, partitioned by price.</li>
+</ol>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = price, y = carat)) +
+  geom_boxplot(mapping = aes(group = cut_width(price, 1000)))</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-24-1.png" width="672" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: decimal">
+<li>How does the price distribution of very large diamonds compare to small diamonds? Is it as you expect, or does it surprise you?</li>
+</ol>
+<pre class="r"><code>diamonds %&gt;%
+  mutate(volume = x * y * z, # naive, but not clear what they want
+         size = ifelse(volume &gt; quantile(volume, 0.75), &quot;large&quot;,  &quot;small&quot;)) %&gt;% 
+  ggplot(mapping = aes(x = price)) +
+  geom_density(mapping = aes(color = size))</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-25-1.png" width="672" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: decimal">
+<li>Combine two of the techniques you’ve learned to visualise the combined distribution of cut, carat, and price.</li>
+</ol>
+<pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = carat, y = price)) +
+  geom_point(mapping = aes(color = cut), alpha = 0.5)</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-26-1.png" width="672" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: decimal">
+<li>Two dimensional plots reveal outliers that are not visible in one dimensional plots. For example, some points in the plot below have an unusual combination of <code>x</code> and <code>y</code> values, which makes the points outliers even though their <code>x</code> and <code>y</code> values appear normal when examined separately.</li>
+</ol>
+<pre class="r"><code>ggplot(data = diamonds) +
+  geom_point(mapping = aes(x = x, y = y)) +
+  coord_cartesian(xlim = c(4, 11), ylim = c(4, 11))</code></pre>
+<p><img src="figure/05-eda.Rmd/unnamed-chunk-27-1.png" width="672" style="display: block; margin: auto;" /></p>
+<blockquote>
+<p>Why is a scatterplot a better display than a binned plot for this case?</p>
+</blockquote>
+<p>Because you want to highlight outliers. A binned plot would focus on the most densely overplotted areas.</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.1 (2019-07-05)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 18.04.3 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/atlas/libblas.so.3.10.3
+LAPACK: /usr/lib/x86_64-linux-gnu/atlas/liblapack.so.3.10.3
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] ggbeeswarm_0.6.0   lvplot_0.2.0       ggstance_0.3.3    
+ [4] forcats_0.4.0      stringr_1.4.0      dplyr_0.8.3       
+ [7] purrr_0.3.2        readr_1.3.1        tidyr_1.0.0       
+[10] tibble_2.1.3       ggplot2_3.2.1      tidyverse_1.2.1   
+[13] nycflights13_1.0.1
+
+loaded via a namespace (and not attached):
+ [1] beeswarm_0.2.3    tidyselect_0.2.5  xfun_0.9         
+ [4] haven_2.1.1       lattice_0.20-38   colorspace_1.4-1 
+ [7] vctrs_0.2.0       generics_0.0.2    viridisLite_0.3.0
+[10] htmltools_0.3.6   yaml_2.2.0        utf8_1.1.4       
+[13] rlang_0.4.0       pillar_1.4.2      glue_1.3.1       
+[16] withr_2.1.2       modelr_0.1.5      readxl_1.3.1     
+[19] lifecycle_0.1.0   munsell_0.5.0     gtable_0.3.0     
+[22] workflowr_1.4.0   cellranger_1.1.0  rvest_0.3.4      
+[25] evaluate_0.14     labeling_0.3      knitr_1.25       
+[28] vipor_0.4.5       fansi_0.4.0       broom_0.5.2      
+[31] Rcpp_1.0.2        backports_1.1.4   scales_1.0.0     
+[34] jsonlite_1.6      fs_1.3.1          hms_0.5.1        
+[37] digest_0.6.21     stringi_1.4.3     grid_3.6.1       
+[40] rprojroot_1.2     cli_1.1.0         tools_3.6.1      
+[43] magrittr_1.5      lazyeval_0.2.2    crayon_1.3.4     
+[46] whisker_0.4       pkgconfig_2.0.2   zeallot_0.1.0    
+[49] xml2_1.2.2        lubridate_1.7.4   assertthat_0.2.1 
+[52] rmarkdown_1.15    httr_1.4.1        rstudioapi_0.10  
+[55] R6_2.4.0          nlme_3.1-141      git2r_0.26.1.9000
+[58] compiler_3.6.1   </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
