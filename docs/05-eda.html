@@ -497,10 +497,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjdblischakwflowr4dstree874ad3b0989a95ce91782f21e50b8d8141d3ead0targetblank874ad3ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jdblischak/wflow-r4ds/tree/874ad3b0989a95ce91782f21e50b8d8141d3ead0" target="_blank">874ad3b</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjdblischakwflowr4dstree8611f4983575938b34c80e6fe6c80ef6466f879btargetblank8611f49a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jdblischak/wflow-r4ds/tree/8611f4983575938b34c80e6fe6c80ef6466f879b" target="_blank">8611f49</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjdblischakwflowr4dstree874ad3b0989a95ce91782f21e50b8d8141d3ead0targetblank874ad3ba" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjdblischakwflowr4dstree8611f4983575938b34c80e6fe6c80ef6466f879btargetblank8611f49a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -549,6 +549,23 @@ Message
 <tbody>
 <tr>
 <td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jdblischak/wflow-r4ds/179b46270c160a60808603385bcc9bde2c27623f/docs/05-eda.html" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
 Rmd
 </td>
 <td>
@@ -587,36 +604,258 @@ library(ggbeeswarm)</code></pre>
 <div id="variation" class="section level2">
 <h2>Variation</h2>
 <p>p. 90</p>
-<ol style="list-style-type: decimal">
-<li>Explore the distribution of each of the <code>x</code>, <code>y</code>, and <code>z</code> variables in <code>diamonds</code>. What do you learn? Think about a diamond and how you might decide which dimension is the length, width, and depth.</li>
-</ol>
+<blockquote>
+<p>Explore the distribution of each of the <code>x</code>, <code>y</code>, and <code>z</code> variables in <code>diamonds</code>. What do you learn? Think about a diamond and how you might decide which dimension is the length, width, and depth.</p>
+</blockquote>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = x)) +
   geom_histogram()</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-1">
+Past versions of unnamed-chunk-1-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-1-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = y)) +
   geom_histogram()</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-1-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-2">
+Past versions of unnamed-chunk-1-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-1-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-1-2.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = z)) +
   geom_histogram()</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-1-3.png" width="672" style="display: block; margin: auto;" /></p>
-<ol style="list-style-type: decimal">
-<li>Explore the distribution of <code>price</code>. Do you discover anything unusual or surprising? (Hint: Carefully think about the <code>binwidth</code> and make sure you try a wide range of values.)</li>
-</ol>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-3">
+Past versions of unnamed-chunk-1-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-1-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-1-3.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<blockquote>
+<p>Explore the distribution of <code>price</code>. Do you discover anything unusual or surprising? (Hint: Carefully think about the <code>binwidth</code> and make sure you try a wide range of values.)</p>
+</blockquote>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = price)) +
   geom_histogram(binwidth = 10)</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-2-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = price)) +
   geom_histogram(binwidth = 100)</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-2">
+Past versions of unnamed-chunk-2-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-2-2.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = price)) +
   geom_histogram(binwidth = 1000)</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-2-3.png" width="672" style="display: block; margin: auto;" /></p>
-<ol style="list-style-type: decimal">
-<li>How many diamonds are 0.99 carat? How many are 1 carat? What do you think is the cause of the difference?</li>
-</ol>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-3">
+Past versions of unnamed-chunk-2-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-2-3.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<blockquote>
+<p>How many diamonds are 0.99 carat? How many are 1 carat? What do you think is the cause of the difference?</p>
+</blockquote>
 <pre class="r"><code>diamonds %&gt;%
   filter(between(carat, 0.99, 1)) %&gt;%
   count(carat)</code></pre>
@@ -625,14 +864,51 @@ library(ggbeeswarm)</code></pre>
   &lt;dbl&gt; &lt;int&gt;
 1  0.99    23
 2  1     1558</code></pre>
-<ol style="list-style-type: decimal">
-<li>Compare and contrast <code>coord_cartesian()</code> vs <code>xlim()</code> or <code>ylim()</code> when zooming in on a histogram. What happens if you leave <code>binwidth</code> unset? What happens if you try and zoom so only half a bar shows?</li>
-</ol>
+<blockquote>
+<p>Compare and contrast <code>coord_cartesian()</code> vs <code>xlim()</code> or <code>ylim()</code> when zooming in on a histogram. What happens if you leave <code>binwidth</code> unset? What happens if you try and zoom so only half a bar shows?</p>
+</blockquote>
 <p>Using <code>coord_cartesian()</code> zooms into the existing plot. Thus the bin width does not change. Using <code>xlim()</code> changes the binwidth because it changes the number of observations. Using <code>ylim()</code> removes data because the bars that go above 1000 are removed from the final plot.</p>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = y)) +
   geom_histogram()</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-4-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = y)) +
   geom_histogram() +
   xlim(5, 10)</code></pre>
@@ -640,29 +916,177 @@ library(ggbeeswarm)</code></pre>
 <pre><code>Warning: Removed 17576 rows containing non-finite values (stat_bin).</code></pre>
 <pre><code>Warning: Removed 2 rows containing missing values (geom_bar).</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-2">
+Past versions of unnamed-chunk-4-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-4-2.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = y)) +
   geom_histogram() +
   ylim(0, 1000)</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <pre><code>Warning: Removed 3 rows containing missing values (geom_bar).</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-4-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-3">
+Past versions of unnamed-chunk-4-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-4-3.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = y)) +
   geom_histogram() +
   coord_cartesian(xlim = c(5, 10))</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-4-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-4">
+Past versions of unnamed-chunk-4-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-4-4.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = y)) +
   geom_histogram() +
   coord_cartesian(ylim = c(0, 1000))</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-4-5.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-5">
+Past versions of unnamed-chunk-4-5.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-4-5.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="missing-values" class="section level2">
 <h2>Missing values</h2>
 <p>p. 93</p>
-<ol style="list-style-type: decimal">
-<li>What happens to missing values in a histogram? What happens to missing values in a bar chart? Why is there a difference?</li>
-</ol>
+<blockquote>
+<p>What happens to missing values in a histogram? What happens to missing values in a bar chart? Why is there a difference?</p>
+</blockquote>
 <p><code>geom_histogram()</code> removes missing values numeric variables:</p>
 <pre class="r"><code>d &lt;- data.frame(x = c(1, 1, 2, 2, NA, 3))
 ggplot(data = d, mapping = aes(x = x)) +
@@ -670,32 +1094,180 @@ ggplot(data = d, mapping = aes(x = x)) +
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <pre><code>Warning: Removed 1 rows containing non-finite values (stat_bin).</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-5-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p><code>geom_bar()</code> keeps missing values for non-numeric variables:</p>
 <pre class="r"><code>d &lt;- data.frame(x = c(&quot;a&quot;, &quot;a&quot;, &quot;b&quot;, &quot;b&quot;, NA, &quot;c&quot;))
 ggplot(data = d, mapping = aes(x = x)) +
   geom_bar()</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
+Past versions of unnamed-chunk-6-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-6-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-6-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>An edge case is integers. They are treated as numeric and have missing values removed. To treat them as discrete, they need to be converted to a factor:</p>
 <pre class="r"><code>d &lt;- data.frame(x = c(1, 1, 2, 2, NA, 3))
 ggplot(data = d, mapping = aes(x = x)) +
   geom_bar()</code></pre>
 <pre><code>Warning: Removed 1 rows containing non-finite values (stat_count).</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
+Past versions of unnamed-chunk-7-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-7-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>d$x &lt;- factor(d$x)
 ggplot(data = d, mapping = aes(x = x)) +
   geom_bar()</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-7-2.png" width="672" style="display: block; margin: auto;" /></p>
-<ol style="list-style-type: decimal">
-<li>What does <code>na.rm = TRUE</code> do in <code>mean()</code> and <code>sum()</code>?</li>
-</ol>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-2">
+Past versions of unnamed-chunk-7-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-7-2.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<blockquote>
+<p>What does <code>na.rm = TRUE</code> do in <code>mean()</code> and <code>sum()</code>?</p>
+</blockquote>
 <p>Missing values are removed prior to performing the calculation.</p>
 </div>
 <div id="covariation---a-categorical-and-continuous-variable" class="section level2">
 <h2>Covariation - A categorical and continuous variable</h2>
 <p>p. 99</p>
-<ol style="list-style-type: decimal">
-<li>Use what you’ve learned to improve the visualisation of the departure times of cancelled vs. non-cancelled flights.</li>
-</ol>
+<blockquote>
+<p>Use what you’ve learned to improve the visualisation of the departure times of cancelled vs. non-cancelled flights.</p>
+</blockquote>
 <p>Plot the density values:</p>
 <pre class="r"><code>nycflights13::flights %&gt;% 
   mutate(
@@ -707,6 +1279,43 @@ ggplot(data = d, mapping = aes(x = x)) +
   ggplot(mapping = aes(sched_dep_time)) + 
     geom_freqpoly(mapping = aes(y = ..density.., colour = cancelled), binwidth = 1/4)</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
+Past versions of unnamed-chunk-8-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-8-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>I prefer the version with <code>geom_density()</code>:</p>
 <pre class="r"><code>nycflights13::flights %&gt;% 
   mutate(
@@ -718,9 +1327,46 @@ ggplot(data = d, mapping = aes(x = x)) +
   ggplot(mapping = aes(sched_dep_time)) + 
     geom_density(mapping = aes(colour = cancelled), bw = 1/4)</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
-<ol style="list-style-type: decimal">
-<li>What variable in the diamonds dataset is most important for predicting the price of a diamond? How is that variable correlated with cut? Why does the combination of those two relationships lead to lower quality diamonds being more expensive?</li>
-</ol>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
+Past versions of unnamed-chunk-9-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-9-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<blockquote>
+<p>What variable in the diamonds dataset is most important for predicting the price of a diamond? How is that variable correlated with cut? Why does the combination of those two relationships lead to lower quality diamonds being more expensive?</p>
+</blockquote>
 <p>carat is the most important for predicting price.</p>
 <pre class="r"><code>summary(lm(price ~ ., data = diamonds))</code></pre>
 <pre><code>
@@ -767,57 +1413,390 @@ F-statistic: 2.688e+04 on 23 and 53916 DF,  p-value: &lt; 2.2e-16</code></pre>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = cut, y = carat)) +
   geom_boxplot()</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-1">
+Past versions of unnamed-chunk-11-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-11-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-11-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>And since a higher carat gets a higher price, lower cuts tend to be more expensive on average.</p>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = carat, y = price)) +
   geom_point(alpha = 0.5) +
   facet_wrap(~ cut)</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
-<ol style="list-style-type: decimal">
-<li>Install the ggstance package, and create a horizontal boxplot. How does this compare to using <code>coord_flip()</code>?</li>
-</ol>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-12-1">
+Past versions of unnamed-chunk-12-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-12-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-12-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<blockquote>
+<p>Install the ggstance package, and create a horizontal boxplot. How does this compare to using <code>coord_flip()</code>?</p>
+</blockquote>
 <p>Have to switch <code>x</code> and <code>y</code> aesthetics:</p>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = cut, y = carat)) +
   geom_boxplot() +
   coord_flip()</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-13-1">
+Past versions of unnamed-chunk-13-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-13-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-13-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = carat, y = cut)) +
   ggstance::geom_boxploth()</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-13-2.png" width="672" style="display: block; margin: auto;" /></p>
-<ol style="list-style-type: decimal">
-<li>One problem with boxplots is that they were developed in an era of much smaller datasets and tend to display a prohibitively large number of “outlying values”. One approach to remedy this problem is the letter value plot. Install the lvplot package, and try using <code>geom_lv()</code> to display the distribution of price vs cut. What do you learn? How do you interpret the plots?</li>
-</ol>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-13-2">
+Past versions of unnamed-chunk-13-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-13-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-13-2.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<blockquote>
+<p>One problem with boxplots is that they were developed in an era of much smaller datasets and tend to display a prohibitively large number of “outlying values”. One approach to remedy this problem is the letter value plot. Install the lvplot package, and try using <code>geom_lv()</code> to display the distribution of price vs cut. What do you learn? How do you interpret the plots?</p>
+</blockquote>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = cut, y = price)) +
   lvplot::geom_lv()</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
-<ol style="list-style-type: decimal">
-<li>Compare and contrast <code>geom_violin()</code> with a facetted <code>geom_histogram()</code>, or a coloured <code>geom_freqpoly()</code>. What are the pros and cons of each method?</li>
-</ol>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-1">
+Past versions of unnamed-chunk-14-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-14-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-14-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<blockquote>
+<p>Compare and contrast <code>geom_violin()</code> with a facetted <code>geom_histogram()</code>, or a coloured <code>geom_freqpoly()</code>. What are the pros and cons of each method?</p>
+</blockquote>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = cut, y = price)) +
   geom_violin()</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-15-1">
+Past versions of unnamed-chunk-15-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-15-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-15-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = price)) +
   geom_histogram() +
   facet_wrap(~ cut)</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-15-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-15-2">
+Past versions of unnamed-chunk-15-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-15-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-15-2.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = price)) +
   geom_freqpoly(mapping = aes(color = cut))</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-15-3.png" width="672" style="display: block; margin: auto;" /></p>
-<ol style="list-style-type: decimal">
-<li>If you have a small dataset, it’s sometimes useful to use <code>geom_jitter()</code> to see the relationship between a continuous and categorical variable. The ggbeeswarm package provides a number of methods similar to <code>geom_jitter()</code>. List them and briefly describe what each one does.</li>
-</ol>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-15-3">
+Past versions of unnamed-chunk-15-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-15-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-15-3.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<blockquote>
+<p>If you have a small dataset, it’s sometimes useful to use <code>geom_jitter()</code> to see the relationship between a continuous and categorical variable. The ggbeeswarm package provides a number of methods similar to <code>geom_jitter()</code>. List them and briefly describe what each one does.</p>
+</blockquote>
 <pre class="r"><code>ggplot(data = diamonds[sample(seq_len(nrow(diamonds)), 1000), ],
        mapping = aes(x = cut, y = price)) +
   ggbeeswarm::geom_beeswarm()</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-16-1">
+Past versions of unnamed-chunk-16-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-16-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-16-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="covariation---two-categorical-variables" class="section level2">
 <h2>Covariation - Two categorical variables</h2>
 <p>p. 101</p>
-<ol style="list-style-type: decimal">
-<li>How could you rescale the count dataset above to more clearly show the distribution of cut within colour, or colour within cut?</li>
-</ol>
+<blockquote>
+<p>How could you rescale the count dataset above to more clearly show the distribution of cut within colour, or colour within cut?</p>
+</blockquote>
 <p>Use a grouped mutate to calculate proportion of each cut within each color.</p>
 <pre class="r"><code>diamonds %&gt;% 
   count(color, cut) %&gt;%
@@ -826,9 +1805,46 @@ F-statistic: 2.688e+04 on 23 and 53916 DF,  p-value: &lt; 2.2e-16</code></pre>
   ggplot(mapping = aes(x = color, y = cut)) +
     geom_tile(mapping = aes(fill = prop))</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
-<ol style="list-style-type: decimal">
-<li>Use <code>geom_tile()</code> together with dplyr to explore how average flight delays vary by destination and month of year. What makes the plot difficult to read? How could you improve it?</li>
-</ol>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-17-1">
+Past versions of unnamed-chunk-17-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-17-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-17-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<blockquote>
+<p>Use <code>geom_tile()</code> together with dplyr to explore how average flight delays vary by destination and month of year. What makes the plot difficult to read? How could you improve it?</p>
+</blockquote>
 <p>Only including non-cancelled flights with delayed arrivals.</p>
 <pre class="r"><code>flights %&gt;%
   filter(!is.na(dep_delay), !is.na(arr_delay), arr_delay &gt; 0) %&gt;%
@@ -838,20 +1854,131 @@ F-statistic: 2.688e+04 on 23 and 53916 DF,  p-value: &lt; 2.2e-16</code></pre>
   ggplot(mapping = aes(x = as.factor(month), y = dest)) +
   geom_tile(mapping = aes(fill = delay))</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
-<ol style="list-style-type: decimal">
-<li>Why is it slightly better to use <code>aes(x = color, y = cut)</code> rather than <code>aes(x = cut, y = color)</code> in the example above?</li>
-</ol>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-18-1">
+Past versions of unnamed-chunk-18-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-18-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-18-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<blockquote>
+<p>Why is it slightly better to use <code>aes(x = color, y = cut)</code> rather than <code>aes(x = cut, y = color)</code> in the example above?</p>
+</blockquote>
 <p>Putting longer variable values on y-axis ensure that the axis labels don’t overlap.</p>
 <pre class="r"><code>diamonds %&gt;% 
   count(color, cut) %&gt;%  
   ggplot(mapping = aes(x = color, y = cut)) +
     geom_tile(mapping = aes(fill = n))</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-19-1">
+Past versions of unnamed-chunk-19-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-19-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-19-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>diamonds %&gt;% 
   count(color, cut) %&gt;%  
   ggplot(mapping = aes(x = cut, y = color)) +
     geom_tile(mapping = aes(fill = n))</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-19-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-19-2">
+Past versions of unnamed-chunk-19-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-19-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-19-2.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="covariation---two-continuous-variables" class="section level2">
 <h2>Covariation - Two continuous variables</h2>
@@ -860,9 +1987,83 @@ F-statistic: 2.688e+04 on 23 and 53916 DF,  p-value: &lt; 2.2e-16</code></pre>
 ggplot(data = smaller, mapping = aes(x = carat, y = price)) + 
   geom_boxplot(mapping = aes(group = cut_width(carat, 0.1)), varwidth = TRUE)</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-20-1">
+Past versions of unnamed-chunk-20-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-20-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-20-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(data = smaller, mapping = aes(x = carat, y = price)) + 
   geom_boxplot(mapping = aes(group = cut_number(carat, 20)))</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-20-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-20-2">
+Past versions of unnamed-chunk-20-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-20-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-20-2.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>I think the above plot is confusing. The use of <code>cut_number()</code> puts a fairly equal number of observations in each bin. However, because <code>carat</code> is mapped to <code>x</code>, the width of the bin corresponds to the width on the x-axis, not the number of observations (as is done with <code>varwidth = TRUE</code>).</p>
 <pre class="r"><code>table(cut_number(diamonds$carat, 20))</code></pre>
 <pre><code>
@@ -875,9 +2076,9 @@ ggplot(data = smaller, mapping = aes(x = carat, y = price)) +
  (1.51,1.7]  (1.7,5.01] 
        1950        2685 </code></pre>
 <p>p. 105</p>
-<ol style="list-style-type: decimal">
-<li>Instead of summarising the conditional distribution with a boxplot, you could use a frequency polygon. What do you need to consider when using <code>cut_width()</code> vs <code>cut_number()</code>? How does that impact a visualisation of the 2d distribution of <code>carat</code> and <code>price</code>?</li>
-</ol>
+<blockquote>
+<p>Instead of summarising the conditional distribution with a boxplot, you could use a frequency polygon. What do you need to consider when using <code>cut_width()</code> vs <code>cut_number()</code>? How does that impact a visualisation of the 2d distribution of <code>carat</code> and <code>price</code>?</p>
+</blockquote>
 <p>With <code>cut_width()</code>, the number of observations in each bin may vary substantially; whereas, with <code>cut_number()</code>, each bin will have a similar number of observations.</p>
 <pre class="r"><code># cut_interval makes n groups with equal range
 table(cut_interval(diamonds$price, n = 10))</code></pre>
@@ -922,31 +2123,216 @@ table(cut_width(diamonds$price, width = 1000))</code></pre>
   geom_freqpoly(mapping = aes(color = cut_width(price, width = 1000)))</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-23-1">
+Past versions of unnamed-chunk-23-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-23-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-23-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = carat)) +
   geom_freqpoly(mapping = aes(color = cut_number(price, n = 10)))</code></pre>
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-23-2.png" width="672" style="display: block; margin: auto;" /></p>
-<ol style="list-style-type: decimal">
-<li>Visualise the distribution of carat, partitioned by price.</li>
-</ol>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-23-2">
+Past versions of unnamed-chunk-23-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-23-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-23-2.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<blockquote>
+<p>Visualise the distribution of carat, partitioned by price.</p>
+</blockquote>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = price, y = carat)) +
   geom_boxplot(mapping = aes(group = cut_width(price, 1000)))</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-24-1.png" width="672" style="display: block; margin: auto;" /></p>
-<ol style="list-style-type: decimal">
-<li>How does the price distribution of very large diamonds compare to small diamonds? Is it as you expect, or does it surprise you?</li>
-</ol>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-24-1">
+Past versions of unnamed-chunk-24-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-24-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-24-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<blockquote>
+<p>How does the price distribution of very large diamonds compare to small diamonds? Is it as you expect, or does it surprise you?</p>
+</blockquote>
 <pre class="r"><code>diamonds %&gt;%
   mutate(volume = x * y * z, # naive, but not clear what they want
          size = ifelse(volume &gt; quantile(volume, 0.75), &quot;large&quot;,  &quot;small&quot;)) %&gt;% 
   ggplot(mapping = aes(x = price)) +
   geom_density(mapping = aes(color = size))</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-25-1.png" width="672" style="display: block; margin: auto;" /></p>
-<ol style="list-style-type: decimal">
-<li>Combine two of the techniques you’ve learned to visualise the combined distribution of cut, carat, and price.</li>
-</ol>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-25-1">
+Past versions of unnamed-chunk-25-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-25-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-25-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<blockquote>
+<p>Combine two of the techniques you’ve learned to visualise the combined distribution of cut, carat, and price.</p>
+</blockquote>
 <pre class="r"><code>ggplot(data = diamonds, mapping = aes(x = carat, y = price)) +
   geom_point(mapping = aes(color = cut), alpha = 0.5)</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-26-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-26-1">
+Past versions of unnamed-chunk-26-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-26-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-26-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <ol style="list-style-type: decimal">
 <li>Two dimensional plots reveal outliers that are not visible in one dimensional plots. For example, some points in the plot below have an unusual combination of <code>x</code> and <code>y</code> values, which makes the points outliers even though their <code>x</code> and <code>y</code> values appear normal when examined separately.</li>
 </ol>
@@ -954,6 +2340,43 @@ table(cut_width(diamonds$price, width = 1000))</code></pre>
   geom_point(mapping = aes(x = x, y = y)) +
   coord_cartesian(xlim = c(4, 11), ylim = c(4, 11))</code></pre>
 <p><img src="figure/05-eda.Rmd/unnamed-chunk-27-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-27-1">
+Past versions of unnamed-chunk-27-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-27-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/179b46270c160a60808603385bcc9bde2c27623f/docs/figure/05-eda.Rmd/unnamed-chunk-27-1.png" target="_blank">179b462</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-09-27
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <blockquote>
 <p>Why is a scatterplot a better display than a binned plot for this case?</p>
 </blockquote>
