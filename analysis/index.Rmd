@@ -14,3 +14,4 @@ editor_options:
 1. Workflow: Scripts (no exercises)
 1. [Exploratory data analysis](05-eda.Rmd)
 1. Workflow: Projects (no exercises)
+1. [Tibbles with tibble](07-tibble.html)

@@ -25,7 +25,7 @@ library(ggbeeswarm)
 
 p. 90
 
-1.  Explore the distribution of each of the `x`, `y`, and `z` variables 
+> Explore the distribution of each of the `x`, `y`, and `z` variables 
     in `diamonds`. What do you learn? Think about a diamond and how you
     might decide which dimension is the length, width, and depth.
 
@@ -38,7 +38,7 @@ ggplot(data = diamonds, mapping = aes(x = z)) +
   geom_histogram()
 ```
 
-1.  Explore the distribution of `price`. Do you discover anything unusual
+> Explore the distribution of `price`. Do you discover anything unusual
     or surprising? (Hint: Carefully think about the `binwidth` and make sure
     you try a wide range of values.)
 
@@ -51,7 +51,7 @@ ggplot(data = diamonds, mapping = aes(x = price)) +
   geom_histogram(binwidth = 1000)
 ```
 
-1.  How many diamonds are 0.99 carat? How many are 1 carat? What
+> How many diamonds are 0.99 carat? How many are 1 carat? What
     do you think is the cause of the difference?
 
 ```{r}
@@ -60,7 +60,7 @@ diamonds %>%
   count(carat)
 ```
 
-1.  Compare and contrast `coord_cartesian()` vs `xlim()` or `ylim()` when
+> Compare and contrast `coord_cartesian()` vs `xlim()` or `ylim()` when
     zooming in on a histogram. What happens if you leave `binwidth` unset?
     What happens if you try and zoom so only half a bar shows?
 
@@ -90,7 +90,7 @@ ggplot(data = diamonds, mapping = aes(x = y)) +
 
 p. 93
 
-1.  What happens to missing values in a histogram?  What happens to missing
+> What happens to missing values in a histogram?  What happens to missing
     values in a bar chart? Why is there a difference?
 
 `geom_histogram()` removes missing values numeric variables:
@@ -121,7 +121,7 @@ ggplot(data = d, mapping = aes(x = x)) +
   geom_bar()
 ```
 
-1.  What does `na.rm = TRUE` do in `mean()` and `sum()`?
+> What does `na.rm = TRUE` do in `mean()` and `sum()`?
 
 Missing values are removed prior to performing the calculation.
 
@@ -129,7 +129,7 @@ Missing values are removed prior to performing the calculation.
 
 p. 99
 
-1.  Use what you've learned to improve the visualisation of the departure times
+> Use what you've learned to improve the visualisation of the departure times
     of cancelled vs. non-cancelled flights.
 
 Plot the density values:
@@ -160,7 +160,7 @@ nycflights13::flights %>%
     geom_density(mapping = aes(colour = cancelled), bw = 1/4)
 ```
 
-1.  What variable in the diamonds dataset is most important for predicting
+> What variable in the diamonds dataset is most important for predicting
     the price of a diamond? How is that variable correlated with cut?
     Why does the combination of those two relationships lead to lower quality
     diamonds being more expensive?
@@ -187,7 +187,7 @@ ggplot(data = diamonds, mapping = aes(x = carat, y = price)) +
   facet_wrap(~ cut)
 ```
 
-1.  Install the ggstance package, and create a horizontal boxplot.
+> Install the ggstance package, and create a horizontal boxplot.
     How does this compare to using `coord_flip()`?
 
 Have to switch `x` and `y` aesthetics:
@@ -200,7 +200,7 @@ ggplot(data = diamonds, mapping = aes(x = carat, y = cut)) +
   ggstance::geom_boxploth()
 ```
 
-1.  One problem with boxplots is that they were developed in an era of 
+> One problem with boxplots is that they were developed in an era of 
     much smaller datasets and tend to display a prohibitively large
     number of "outlying values". One approach to remedy this problem is
     the letter value plot. Install the lvplot package, and try using
@@ -212,7 +212,7 @@ ggplot(data = diamonds, mapping = aes(x = cut, y = price)) +
   lvplot::geom_lv()
 ```
 
-1.  Compare and contrast `geom_violin()` with a facetted `geom_histogram()`,
+> Compare and contrast `geom_violin()` with a facetted `geom_histogram()`,
     or a coloured `geom_freqpoly()`. What are the pros and cons of each 
     method?
 
@@ -226,7 +226,7 @@ ggplot(data = diamonds, mapping = aes(x = price)) +
   geom_freqpoly(mapping = aes(color = cut))
 ```
 
-1.  If you have a small dataset, it's sometimes useful to use `geom_jitter()`
+> If you have a small dataset, it's sometimes useful to use `geom_jitter()`
     to see the relationship between a continuous and categorical variable.
     The ggbeeswarm package provides a number of methods similar to 
     `geom_jitter()`. List them and briefly describe what each one does.
@@ -241,7 +241,7 @@ ggplot(data = diamonds[sample(seq_len(nrow(diamonds)), 1000), ],
 
 p. 101
 
-1.  How could you rescale the count dataset above to more clearly show
+> How could you rescale the count dataset above to more clearly show
     the distribution of cut within colour, or colour within cut?
 
 Use a grouped mutate to calculate proportion of each cut within each color.
@@ -255,7 +255,7 @@ diamonds %>%
     geom_tile(mapping = aes(fill = prop))
 ```
 
-1.  Use `geom_tile()` together with dplyr to explore how average flight
+> Use `geom_tile()` together with dplyr to explore how average flight
     delays vary by destination and month of year.  What makes the 
     plot difficult to read? How could you improve it?
 
@@ -271,7 +271,7 @@ flights %>%
   geom_tile(mapping = aes(fill = delay))
 ```
 
-1.  Why is it slightly better to use `aes(x = color, y = cut)` rather
+> Why is it slightly better to use `aes(x = color, y = cut)` rather
     than `aes(x = cut, y = color)` in the example above?
 
 Putting longer variable values on y-axis ensure that the axis labels don't
@@ -310,7 +310,7 @@ table(cut_number(diamonds$carat, 20))
 
 p. 105
 
-1.  Instead of summarising the conditional distribution with a boxplot, you
+> Instead of summarising the conditional distribution with a boxplot, you
     could use a frequency polygon. What do you need to consider when using
     `cut_width()` vs `cut_number()`? How does that impact a visualisation of
     the 2d distribution of `carat` and `price`?
@@ -337,14 +337,14 @@ ggplot(data = diamonds, mapping = aes(x = carat)) +
   geom_freqpoly(mapping = aes(color = cut_number(price, n = 10)))
 ```
 
-1.  Visualise the distribution of carat, partitioned by price.
+> Visualise the distribution of carat, partitioned by price.
 
 ```{r}
 ggplot(data = diamonds, mapping = aes(x = price, y = carat)) +
   geom_boxplot(mapping = aes(group = cut_width(price, 1000)))
 ```
 
-1.  How does the price distribution of very large diamonds compare to small 
+> How does the price distribution of very large diamonds compare to small 
     diamonds? Is it as you expect, or does it surprise you?
 
 ```{r}
@@ -355,7 +355,7 @@ diamonds %>%
   geom_density(mapping = aes(color = size))
 ```
     
-1.  Combine two of the techniques you've learned to visualise the 
+> Combine two of the techniques you've learned to visualise the 
     combined distribution of cut, carat, and price.
 
 ```{r}
