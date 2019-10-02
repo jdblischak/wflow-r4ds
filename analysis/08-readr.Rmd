@@ -1,0 +1,221 @@
+---
+title: "Data import with readr"
+author: "John Blischak"
+date: "2019-10-01"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+* [Book chapter](https://r4ds.had.co.nz/data-import.html)
+* [Source](https://github.com/hadley/r4ds/blob/master/import.Rmd)
+
+## Setup
+
+```{r setup, message=FALSE}
+library(tidyverse)
+```
+
+## Getting started
+
+p. 128
+
+1.  What function would you use to read a file where fields were separated with  
+    "|"?
+
+`read_delim()` with `delim = "|"`.
+
+1.  Apart from `file`, `skip`, and `comment`, what other arguments do
+    `read_csv()` and `read_tsv()` have in common?
+
+```{r}
+intersect(names(formals(read_csv)), names(formals(read_tsv)))
+```
+
+In fact they share all the same arguments:
+
+```{r}
+identical(names(formals(read_csv)), names(formals(read_tsv)))
+```
+
+`read_csv()` and `read_tsv()` are both wrappers to the internal function
+`read_delimited()`:
+
+```{r}
+names(formals(readr:::read_delimited))
+```
+
+1.  What are the most important arguments to `read_fwf()`?
+
+```{r}
+names(formals(read_fwf))
+```
+
+` col_positions`
+
+> col_positions	
+Column positions, as created by fwf_empty(), fwf_widths() or fwf_positions(). To read in only selected fields, use fwf_positions(). If the width of the last column is variable (a ragged fwf file), supply the last end position as NA.
+
+1.  Sometimes strings in a CSV file contain commas. To prevent them from
+    causing problems they need to be surrounded by a quoting character, like
+    `"` or `'`. By convention, `read_csv()` assumes that the quoting
+    character will be `"`, and if you want to change it you'll need to
+    use `read_delim()` instead. What arguments do you need to specify
+    to read the following text into a data frame?
+    
+```{r, eval = FALSE}
+"x,y\n1,'a,b'"
+```
+
+Set `quote` to `'`:
+
+```{r}
+read_delim("x,y\n1,'a,b'", delim = ",", quote = "'")
+```
+
+As of readr
+[1.1.0](https://github.com/tidyverse/readr/blob/master/NEWS.md#readr-110)
+(released in March 2017), you can just use `read_csv()`:
+
+```{r}
+read_csv("x,y\n1,'a,b'", quote = "'")
+```
+
+1.  Identify what is wrong with each of the following inline CSV files. 
+    What happens when you run the code?
+    
+```{r, eval = TRUE}
+# 2 column names but 3 columns of data
+read_csv("a,b\n1,2,3\n4,5,6")
+# Each row has a different number of columns
+read_csv("a,b,c\n1,2\n1,2,3,4")
+# There is an opening quote in the second row but no closing quote
+read_csv("a,b\n\"1")
+# Both columns are characters b/c they contain a mix of numbers and characters
+read_csv("a,b\n1,2\na,b")
+# The delimiter is a `;`, so everything is in one column
+read_csv("a;b\n1;3")
+```
+
+## Parsing a vector
+
+p. 136
+
+1.  What are the most important arguments to `locale()`? 
+
+Seems like a pretty context-dependent question. In this chapter, they use
+`decimal_mark` to accomodate different numeric styles,
+`date_names` to format the date names according to the tradition in a specific location,
+and `encoding` to specify the encoding used by the file.
+I think `tz` for time zone would also be useful.
+
+1.  What happens if you try and set `decimal_mark` and `grouping_mark` 
+    to the same character? What happens to the default value of 
+    `grouping_mark` when you set `decimal_mark` to ","? What happens
+    to the default value of `decimal_mark` when you set the `grouping_mark`
+    to "."?
+
+```{r, error=TRUE}
+locale(decimal_mark = ".", grouping_mark = ".")
+locale(decimal_mark = ",")$grouping_mark
+locale(grouping_mark = ".")$decimal_mark
+```
+
+1.  I didn't discuss the `date_format` and `time_format` options to
+    `locale()`. What do they do? Construct an example that shows when 
+    they might be useful.
+
+The `date_format` can be used to parse dates that are not in the default
+`YYYY-MM-DD` format:
+
+```{r}
+parse_date("01/31/2000")
+# January 31, 2000
+parse_date("01/31/2000", locale = locale(date_format = "%m/%d/%Y"))
+```
+
+According to the [readr locales
+vignette](https://cran.r-project.org/web/packages/readr/vignettes/locales.html),
+the argument `time_format` is not used, so it is never useful. But the vignette
+is outdated. `time_format` is used exactly the same as `date_format`.
+
+```{r}
+parse_time("17:55:14")
+parse_time("5:55:14 PM")
+# Example of a non-standard time
+parse_time("h5m55s14 PM")
+parse_time("h5m55s14 PM", locale = locale(time_format = "h%Hm%Ms%S %p"))
+```
+
+1.  If you live outside the US, create a new locale object that encapsulates 
+    the settings for the types of file you read most commonly.
+
+You can create it by passing custom arguments to `locale` and saving the result.
+Many languages are already supported:
+
+```{r}
+(es <- locale("es"))
+str(es)
+```
+    
+1.  What's the difference between `read_csv()` and `read_csv2()`?
+
+> read_csv2() uses ; for the field separator and , for the decimal point. This
+is common in some European countries.
+
+1.  What are the most common encodings used in Europe? What are the
+    most common encodings used in Asia? Do some googling to find out.
+
+From the online book [Programming with
+Unicode](https://unicodebook.readthedocs.io/) (CC BY-SA 3.0
+[license](https://unicodebook.readthedocs.io/about.html#license)), the most
+[popular
+encodings](https://unicodebook.readthedocs.io/encodings.html#popularity) on the
+internet are:
+
+```
+1st (56%): ASCII
+2nd (23%): Western Europe encodings (ISO 8859-1, ISO 8859-15 and cp1252)
+3rd (8%): Chinese encodings (GB2312, …)
+and then come Korean (EUC-KR), Cyrillic (cp1251, KOI8-R, …), East Europe (cp1250, ISO-8859-2), Arabic (cp1256, ISO-8859-6), etc.
+(UTF-8 was not used on the web in 2001)
+```
+
+Note that I used [DuckDuckGo](https://duckduckgo.com/) for the online search :-)
+
+1.  Generate the correct format string to parse each of the following 
+    dates and times:
+
+See `?strptime` for the available conversion specifiers (not sure whether to be
+proud or depressed that I remembered off the top of my head that `%B` was the
+full month name).
+
+```{r}
+d1 <- "January 1, 2010"
+parse_date(d1, "%B %d, %Y")
+# Alternatively can specify date_format via locale argument
+parse_date(d1, locale = locale(date_format = "%B %d, %Y"))
+d2 <- "2015-Mar-07"
+parse_date(d2, "%Y-%b-%d")
+d3 <- "06-Jun-2017"
+parse_date(d3, "%d-%b-%Y")
+d4 <- c("August 19 (2015)", "July 1 (2015)")
+parse_date(d4, "%B %d (%Y)")
+d5 <- "12/30/14" # Dec 30, 2014
+parse_date(d5, "%m/%d/%y")
+t1 <- "1705"
+parse_time(t1, "%H%M")
+t2 <- "11:15:10.12 PM"
+parse_time(t2, "%H:%M:%OS %p")
+# Alternatively can specify time_format via locale argument
+parse_time(t2, locale = locale(time_format = ("%H:%M:%OS %p")))
+```
+
+`%OS` is strange. Apparently it is R-specific, and I couldn't get readr to
+accept the decimal argument:
+
+> Specific to R is %OSn, which for output gives the seconds truncated to 0 <= n
+<= 6 decimal places (and if %OS is not followed by a digit, it uses the setting
+of getOption("digits.secs"), or if that is unset, n = 0). Further, for strptime
+%OS will input seconds including fractional seconds. Note that %S does not read
+fractional parts on output.

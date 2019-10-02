@@ -15,3 +15,4 @@ editor_options:
 1. [Exploratory data analysis](05-eda.html)
 1. Workflow: Projects (no exercises)
 1. [Tibbles with tibble](07-tibble.html)
+1. [Data import with readr](08-readr.html)
