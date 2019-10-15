@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="John Blischak" />
+
+<meta name="date" content="2019-10-15" />
+
+<title>Tidy data with tidyr</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">wflow-r4ds</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/jdblischak/wflow-r4ds">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Tidy data with tidyr</h1>
+<h4 class="author">John Blischak</h4>
+<h4 class="date">2019-10-15</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2019-10-15
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>wflow-r4ds/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.4.0.9001). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20190925code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20190925)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20190925code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20190925)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjdblischakwflowr4dstreed856862a8a2e33e0608c644b8d63e47ecb520321targetblankd856862a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jdblischak/wflow-r4ds/tree/d856862a8a2e33e0608c644b8d63e47ecb520321" target="_blank">d856862</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjdblischakwflowr4dstreed856862a8a2e33e0608c644b8d63e47ecb520321targetblankd856862a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the R Markdown and HTML files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view them.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/d856862a8a2e33e0608c644b8d63e47ecb520321/analysis/09-tidyr.Rmd" target="_blank">d856862</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-10-16
+</td>
+<td>
+Chapter 9 exercises on tidyr
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<ul>
+<li><a href="https://r4ds.had.co.nz/tidy-data.html">Book chapter</a></li>
+<li><a href="https://github.com/hadley/r4ds/blob/master/tidy.Rmd">Source</a></li>
+</ul>
+<div id="setup" class="section level2">
+<h2>Setup</h2>
+<pre class="r"><code>library(tidyverse)</code></pre>
+</div>
+<div id="tidy-data" class="section level2">
+<h2>Tidy data</h2>
+<p>p. 151</p>
+<ol style="list-style-type: decimal">
+<li>Using prose, describe how the variables and observations are organised in each of the sample tables.</li>
+</ol>
+<ul>
+<li><code>table1</code> - Each observation of a country in a given year is in its own row. The number of cases and the total population are columns.</li>
+<li><code>table2</code> - This is a longer format. Each observation has two rows, one for the cases and one for the population.</li>
+<li><code>table3</code> - Each observation of a country in a given year is in its own row. The number of cases and the total population are combined into a single column.</li>
+<li><code>table4a</code> - Each country is a row. The number of cases in 1999 and 2000 are in separate columns.</li>
+<li><code>table4b</code> - Each country is a row. The total population in 1999 and 2000 are in separate columns.</li>
+</ul>
+<ol style="list-style-type: decimal">
+<li><p>Compute the <code>rate</code> for <code>table2</code>, and <code>table4a</code> + <code>table4b</code>. You will need to perform four operations:</p>
+<ol style="list-style-type: decimal">
+<li>Extract the number of TB cases per country per year.</li>
+<li>Extract the matching population per country per year.</li>
+<li>Divide cases by population, and multiply by 10000.</li>
+<li>Store back in the appropriate place.</li>
+</ol>
+<p>Which representation is easiest to work with? Which is hardest? Why?</p></li>
+</ol>
+<p>The example tables are included as data sets when the tidyr package is loaded (see <code>?table1</code>).</p>
+<pre class="r"><code>tb &lt;- table2 %&gt;% filter(type == &quot;cases&quot;) %&gt;% select(country, year, tb = count)
+pop &lt;- table2 %&gt;% filter(type == &quot;population&quot;)  %&gt;% select(pop = count)
+rate &lt;- tb$tb / pop$pop * 10^4
+cbind(tb, pop, rate)</code></pre>
+<pre><code>      country year     tb        pop     rate
+1 Afghanistan 1999    745   19987071 0.372741
+2 Afghanistan 2000   2666   20595360 1.294466
+3      Brazil 1999  37737  172006362 2.193930
+4      Brazil 2000  80488  174504898 4.612363
+5       China 1999 212258 1272915272 1.667495
+6       China 2000 213766 1280428583 1.669488</code></pre>
+<pre class="r"><code>tb &lt;- c(table4a$`1999`, table4a$`2000`)
+pop &lt;- c(table4b$`1999`, table4b$`2000`)
+rate &lt;- tb / pop * 10^4
+cbind(table4a$country, tb, pop, rate)</code></pre>
+<pre><code>                   tb       pop          rate               
+[1,] &quot;Afghanistan&quot; &quot;745&quot;    &quot;19987071&quot;   &quot;0.372740958392553&quot;
+[2,] &quot;Brazil&quot;      &quot;37737&quot;  &quot;172006362&quot;  &quot;2.19393047799011&quot; 
+[3,] &quot;China&quot;       &quot;212258&quot; &quot;1272915272&quot; &quot;1.66749511667419&quot; 
+[4,] &quot;Afghanistan&quot; &quot;2666&quot;   &quot;20595360&quot;   &quot;1.29446632639585&quot; 
+[5,] &quot;Brazil&quot;      &quot;80488&quot;  &quot;174504898&quot;  &quot;4.61236337331918&quot; 
+[6,] &quot;China&quot;       &quot;213766&quot; &quot;1280428583&quot; &quot;1.6694878795907&quot;  </code></pre>
+<p>They were both kind of awkward.</p>
+<ol style="list-style-type: decimal">
+<li>Recreate the plot showing change in cases over time using <code>table2</code> instead of <code>table1</code>. What do you need to do first?</li>
+</ol>
+<p>Need to convert from long to wide. Kind of putting the cart before the horse. I guess maybe they want you to think about how painful this is to do manually.</p>
+<p>I’ll reuse my code from above:</p>
+<pre class="r"><code>tb &lt;- table2 %&gt;% filter(type == &quot;cases&quot;) %&gt;% select(country, year, tb = count)
+pop &lt;- table2 %&gt;% filter(type == &quot;population&quot;)  %&gt;% select(pop = count)
+rate &lt;- tb$tb / pop$pop * 10^4
+cbind(tb, pop, rate) %&gt;%
+  ggplot(aes(x = year, y = tb)) +
+  geom_line(aes(group = country), color = &quot;grey50&quot;) +
+  geom_point(aes(color = country))</code></pre>
+<p><img src="figure/09-tidyr.Rmd/cases-over-time-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="spreading-and-gathering" class="section level2">
+<h2>Spreading and gathering</h2>
+<p>p. 156</p>
+<ol style="list-style-type: decimal">
+<li><p>Why are <code>gather()</code> and <code>spread()</code> not perfectly symmetrical?<br />
+Carefully consider the following example:</p>
+<pre class="r"><code>stocks &lt;- tibble(
+  year   = c(2015, 2015, 2016, 2016),
+  half  = c(   1,    2,     1,    2),
+  return = c(1.88, 0.59, 0.92, 0.17)
+)
+stocks %&gt;% 
+  spread(year, return) %&gt;% 
+  gather(&quot;year&quot;, &quot;return&quot;, `2015`:`2016`)</code></pre>
+<pre><code># A tibble: 4 x 3
+   half year  return
+  &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;
+1     1 2015    1.88
+2     2 2015    0.59
+3     1 2016    0.92
+4     2 2016    0.17</code></pre>
+<p>(Hint: look at the variable types and think about column <em>names</em>.)</p></li>
+</ol>
+<p>Year is converted to a character vector after <code>gather()</code> moves them from column names to their own column.</p>
+<pre><code>Both `spread()` and `gather()` have a `convert` argument. What does it 
+do?</code></pre>
+<p>If <code>convert=TRUE</code> (the default is <code>FALSE</code>), then <code>utils::type.convert()</code> will be run on the newly created columns. This results in <code>year</code> being converted to an integer, which is still different from its original status as a numeric vector.</p>
+<pre class="r"><code>stocks %&gt;% 
+  spread(year, return) %&gt;% 
+  gather(&quot;year&quot;, &quot;return&quot;, `2015`:`2016`, convert = TRUE)</code></pre>
+<pre><code># A tibble: 4 x 3
+   half  year return
+  &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;
+1     1  2015   1.88
+2     2  2015   0.59
+3     1  2016   0.92
+4     2  2016   0.17</code></pre>
+<ol style="list-style-type: decimal">
+<li><p>Why does this code fail?</p>
+<pre class="r"><code>table4a %&gt;% 
+  gather(1999, 2000, key = &quot;year&quot;, value = &quot;cases&quot;)</code></pre>
+<pre><code>Error in inds_combine(.vars, ind_list): Position must be between 0 and n</code></pre></li>
+</ol>
+<p>Because <code>1999</code> and <code>2000</code> are numbers, they are interpreted as indicating the columns to gather by their position. Using column position is an alternative way to specify the columns:</p>
+<pre class="r"><code>table4a %&gt;%
+  gather(2, 3, key = &quot;year&quot;, value = &quot;cases&quot;)</code></pre>
+<pre><code># A tibble: 6 x 3
+  country     year   cases
+  &lt;chr&gt;       &lt;chr&gt;  &lt;int&gt;
+1 Afghanistan 1999     745
+2 Brazil      1999   37737
+3 China       1999  212258
+4 Afghanistan 2000    2666
+5 Brazil      2000   80488
+6 China       2000  213766</code></pre>
+<ol style="list-style-type: decimal">
+<li><p>Why does spreading this tibble fail? How could you add a new column to fix the problem?</p>
+<pre class="r"><code>people &lt;- tribble(
+  ~name,             ~key,    ~value,
+  #-----------------|--------|------
+  &quot;Phillip Woods&quot;,   &quot;age&quot;,       45,
+  &quot;Phillip Woods&quot;,   &quot;height&quot;,   186,
+  &quot;Phillip Woods&quot;,   &quot;age&quot;,       50,
+  &quot;Jessica Cordero&quot;, &quot;age&quot;,       37,
+  &quot;Jessica Cordero&quot;, &quot;height&quot;,   156
+)</code></pre></li>
+</ol>
+<p>It fails because there are two entries for name “Phillip Woods” and “age”. This could be fixed by adding a new column with a unique ID for each individual, so that people with the same name could be distinguished.</p>
+<pre class="r"><code>people %&gt;%
+  spread(key, value)</code></pre>
+<pre><code>Each row of output must be identified by a unique combination of keys.
+Keys are shared for 2 rows:
+* 1, 3</code></pre>
+<ol style="list-style-type: decimal">
+<li><p>Tidy the simple tibble below. Do you need to spread or gather it? What are the variables?</p>
+<pre class="r"><code>preg &lt;- tribble(
+  ~pregnant, ~male, ~female,
+  &quot;yes&quot;,     NA,    10,
+  &quot;no&quot;,      20,    12
+)</code></pre></li>
+</ol>
+<p>The variables are pregnancy status (yes, no), gender (male, female), and count (the number of observations of each combination of pregnancy status and gender). It needs to be gathered so that the variable gender is its own column.</p>
+<pre class="r"><code>preg %&gt;%
+  gather(key = &quot;gender&quot;, value = &quot;count&quot;, male, female)</code></pre>
+<pre><code># A tibble: 4 x 3
+  pregnant gender count
+  &lt;chr&gt;    &lt;chr&gt;  &lt;dbl&gt;
+1 yes      male      NA
+2 no       male      20
+3 yes      female    10
+4 no       female    12</code></pre>
+</div>
+<div id="separating-and-uniting" class="section level2">
+<h2>Separating and uniting</h2>
+<p>p. 160</p>
+<p>Note in the print copy I have, the section is mistakenly named “Separating and pull”.</p>
+<ol style="list-style-type: decimal">
+<li><p>What do the <code>extra</code> and <code>fill</code> arguments do in <code>separate()</code>? Experiment with the various options for the following two toy datasets.</p>
+<pre class="r"><code>tibble(x = c(&quot;a,b,c&quot;, &quot;d,e,f,g&quot;, &quot;h,i,j&quot;)) %&gt;% 
+  separate(x, c(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;))
+
+tibble(x = c(&quot;a,b,c&quot;, &quot;d,e&quot;, &quot;f,g,i&quot;)) %&gt;% 
+  separate(x, c(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;))</code></pre></li>
+</ol>
+<p>The argument <code>extra</code> “controls what happens when there are too many pieces”.</p>
+<pre class="r"><code>tibble(x = c(&quot;a,b,c&quot;, &quot;d,e,f,g&quot;, &quot;h,i,j&quot;))</code></pre>
+<pre><code># A tibble: 3 x 1
+  x      
+  &lt;chr&gt;  
+1 a,b,c  
+2 d,e,f,g
+3 h,i,j  </code></pre>
+<pre class="r"><code>tibble(x = c(&quot;a,b,c&quot;, &quot;d,e,f,g&quot;, &quot;h,i,j&quot;)) %&gt;% 
+  separate(x, c(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;))</code></pre>
+<pre><code>Warning: Expected 3 pieces. Additional pieces discarded in 1 rows [2].</code></pre>
+<pre><code># A tibble: 3 x 3
+  one   two   three
+  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+1 a     b     c    
+2 d     e     f    
+3 h     i     j    </code></pre>
+<pre class="r"><code>tibble(x = c(&quot;a,b,c&quot;, &quot;d,e,f,g&quot;, &quot;h,i,j&quot;)) %&gt;% 
+  separate(x, c(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;), extra = &quot;drop&quot;)</code></pre>
+<pre><code># A tibble: 3 x 3
+  one   two   three
+  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+1 a     b     c    
+2 d     e     f    
+3 h     i     j    </code></pre>
+<pre class="r"><code>tibble(x = c(&quot;a,b,c&quot;, &quot;d,e,f,g&quot;, &quot;h,i,j&quot;)) %&gt;% 
+  separate(x, c(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;), extra = &quot;merge&quot;)</code></pre>
+<pre><code># A tibble: 3 x 3
+  one   two   three
+  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+1 a     b     c    
+2 d     e     f,g  
+3 h     i     j    </code></pre>
+<p>The argument <code>fill</code> “controls what happens when there are not enough pieces”.</p>
+<pre class="r"><code>tibble(x = c(&quot;a,b,c&quot;, &quot;d,e&quot;, &quot;f,g,i&quot;))</code></pre>
+<pre><code># A tibble: 3 x 1
+  x    
+  &lt;chr&gt;
+1 a,b,c
+2 d,e  
+3 f,g,i</code></pre>
+<pre class="r"><code>tibble(x = c(&quot;a,b,c&quot;, &quot;d,e&quot;, &quot;f,g,i&quot;)) %&gt;% 
+  separate(x, c(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;))</code></pre>
+<pre><code>Warning: Expected 3 pieces. Missing pieces filled with `NA` in 1 rows [2].</code></pre>
+<pre><code># A tibble: 3 x 3
+  one   two   three
+  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+1 a     b     c    
+2 d     e     &lt;NA&gt; 
+3 f     g     i    </code></pre>
+<pre class="r"><code>tibble(x = c(&quot;a,b,c&quot;, &quot;d,e&quot;, &quot;f,g,i&quot;)) %&gt;% 
+  separate(x, c(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;), fill = &quot;right&quot;)</code></pre>
+<pre><code># A tibble: 3 x 3
+  one   two   three
+  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+1 a     b     c    
+2 d     e     &lt;NA&gt; 
+3 f     g     i    </code></pre>
+<pre class="r"><code>tibble(x = c(&quot;a,b,c&quot;, &quot;d,e&quot;, &quot;f,g,i&quot;)) %&gt;% 
+  separate(x, c(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;), fill = &quot;left&quot;)</code></pre>
+<pre><code># A tibble: 3 x 3
+  one   two   three
+  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+1 a     b     c    
+2 &lt;NA&gt;  d     e    
+3 f     g     i    </code></pre>
+<ol style="list-style-type: decimal">
+<li>Both <code>unite()</code> and <code>separate()</code> have a <code>remove</code> argument. What does it do? Why would you set it to <code>FALSE</code>?</li>
+</ol>
+<p>The argument <code>remove</code> removes the original column(s) that was/were separated or united from the final output. You would set it to <code>FALSE</code> if you wanted to maintain these columns for your analysis. For example, it could be useful to have the 4-digit year, 2-digit year, and century in the same data frame.</p>
+<ol style="list-style-type: decimal">
+<li>Compare and contrast <code>separate()</code> and <code>extract()</code>. Why are there three variations of separation (by position, by separator, and with groups), but only one unite?</li>
+</ol>
+<p><code>extract()</code> uses capture groups from a regular expression. <code>separate()</code> uses a character or numeric position to split.</p>
+<p>Because there are so many potential ways to separate a character string. On the other hand, uniting only requires the connecting character. And if you wanted to unite from subsets of the existing columns, you could first run <code>separate()</code> to create the new columns and then unite them.</p>
+</div>
+<div id="missing-values" class="section level2">
+<h2>Missing values</h2>
+<p>p.163</p>
+<ol style="list-style-type: decimal">
+<li>Compare and contrast the <code>fill</code> arguments to <code>spread()</code> and <code>complete()</code>.</li>
+</ol>
+<p>The argument <code>fill</code> to both functions provides the option of specifying the value to use for missing values (instead of <code>NA</code>). The difference is that <code>spread()</code> only accepts one argument; whereas, <code>complete()</code> expects a named list where the name corresponds to the column where the missing value should be replaced.</p>
+<ol style="list-style-type: decimal">
+<li>What does the direction argument to <code>fill()</code> do?</li>
+</ol>
+<p>Determines whether to fill in missing values from top to bottom (<code>&quot;down&quot;</code>, the default) or from bottom to top (<code>&quot;up&quot;</code>). There are also the options <code>&quot;downup&quot;</code> and <code>&quot;updown&quot;</code>, but it is unclear to me how these work from the description, and the toy data set doesn’t reveal any difference with their shorter counterparts.</p>
+<pre class="r"><code>treatment &lt;- tribble(
+  ~ person,           ~ treatment, ~response,
+  &quot;Derrick Whitmore&quot;, 1,           7,
+  NA,                 2,           10,
+  NA,                 3,           9,
+  &quot;Katherine Burke&quot;,  1,           4
+)
+treatment %&gt;% 
+  fill(person, .direction = &quot;down&quot;)</code></pre>
+<pre><code># A tibble: 4 x 3
+  person           treatment response
+  &lt;chr&gt;                &lt;dbl&gt;    &lt;dbl&gt;
+1 Derrick Whitmore         1        7
+2 Derrick Whitmore         2       10
+3 Derrick Whitmore         3        9
+4 Katherine Burke          1        4</code></pre>
+<pre class="r"><code>treatment %&gt;% 
+  fill(person, .direction = &quot;up&quot;)</code></pre>
+<pre><code># A tibble: 4 x 3
+  person           treatment response
+  &lt;chr&gt;                &lt;dbl&gt;    &lt;dbl&gt;
+1 Derrick Whitmore         1        7
+2 Katherine Burke          2       10
+3 Katherine Burke          3        9
+4 Katherine Burke          1        4</code></pre>
+<pre class="r"><code>treatment %&gt;% 
+  fill(person, .direction = &quot;downup&quot;)</code></pre>
+<pre><code># A tibble: 4 x 3
+  person           treatment response
+  &lt;chr&gt;                &lt;dbl&gt;    &lt;dbl&gt;
+1 Derrick Whitmore         1        7
+2 Derrick Whitmore         2       10
+3 Derrick Whitmore         3        9
+4 Katherine Burke          1        4</code></pre>
+<pre class="r"><code>treatment %&gt;% 
+  fill(person, .direction = &quot;updown&quot;)</code></pre>
+<pre><code># A tibble: 4 x 3
+  person           treatment response
+  &lt;chr&gt;                &lt;dbl&gt;    &lt;dbl&gt;
+1 Derrick Whitmore         1        7
+2 Katherine Burke          2       10
+3 Katherine Burke          3        9
+4 Katherine Burke          1        4</code></pre>
+</div>
+<div id="case-study" class="section level2">
+<h2>Case study</h2>
+<p>p. 168</p>
+<pre class="r"><code>tidywho &lt;- who %&gt;%
+  gather(key, value, new_sp_m014:newrel_f65, na.rm = TRUE) %&gt;% 
+  mutate(key = stringr::str_replace(key, &quot;newrel&quot;, &quot;new_rel&quot;)) %&gt;%
+  separate(key, c(&quot;new&quot;, &quot;var&quot;, &quot;sexage&quot;)) %&gt;% 
+  select(-new, -iso2, -iso3) %&gt;% 
+  separate(sexage, c(&quot;sex&quot;, &quot;age&quot;), sep = 1)</code></pre>
+<ol style="list-style-type: decimal">
+<li>In this case study I set <code>na.rm = TRUE</code> just to make it easier to check that we had the correct values. Is this reasonable? Think about how missing values are represented in this dataset. Are there implicit missing values? What’s the difference between an <code>NA</code> and zero?</li>
+</ol>
+<p>The data set contains both <code>NA</code> and zeros, e.g.</p>
+<pre class="r"><code>length(who$new_sp_f014)</code></pre>
+<pre><code>[1] 7240</code></pre>
+<pre class="r"><code>sum(is.na(who$new_sp_m014))</code></pre>
+<pre><code>[1] 4067</code></pre>
+<pre class="r"><code>sum(who$new_sp_m014  == 0, na.rm = TRUE)</code></pre>
+<pre><code>[1] 862</code></pre>
+<pre class="r"><code>tidywho_na &lt;- who %&gt;%
+  gather(key, value, new_sp_m014:newrel_f65, na.rm = FALSE) %&gt;% 
+  mutate(key = stringr::str_replace(key, &quot;newrel&quot;, &quot;new_rel&quot;)) %&gt;%
+  separate(key, c(&quot;new&quot;, &quot;var&quot;, &quot;sexage&quot;)) %&gt;% 
+  select(-new, -iso2, -iso3) %&gt;% 
+  separate(sexage, c(&quot;sex&quot;, &quot;age&quot;), sep = 1)</code></pre>
+<ol style="list-style-type: decimal">
+<li>What happens if you neglect the <code>mutate()</code> step? (<code>mutate(key = stringr::str_replace(key, &quot;newrel&quot;, &quot;new_rel&quot;))</code>)</li>
+</ol>
+<p>Because there aren’t enough pieces (2 instead of 3), all the variables with <code>newrel</code> have their <code>sexage</code> stored in <code>var</code>, which results in <code>sex</code> and <code>age</code> being missing for all the new cases of relapsed TB.</p>
+<pre class="r"><code> who %&gt;%
+  gather(key, value, new_sp_m014:newrel_f65, na.rm = TRUE) %&gt;% 
+  separate(key, c(&quot;new&quot;, &quot;var&quot;, &quot;sexage&quot;)) %&gt;%
+  tail</code></pre>
+<pre><code>Warning: Expected 3 pieces. Missing pieces filled with `NA` in 2580 rows
+[73467, 73468, 73469, 73470, 73471, 73472, 73473, 73474, 73475, 73476,
+73477, 73478, 73479, 73480, 73481, 73482, 73483, 73484, 73485, 73486, ...].</code></pre>
+<pre><code># A tibble: 6 x 8
+  country                        iso2  iso3   year new   var   sexage value
+  &lt;chr&gt;                          &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;int&gt;
+1 Venezuela (Bolivarian Republi… VE    VEN    2013 newr… f65   &lt;NA&gt;     402
+2 Viet Nam                       VN    VNM    2013 newr… f65   &lt;NA&gt;    3110
+3 Wallis and Futuna Islands      WF    WLF    2013 newr… f65   &lt;NA&gt;       2
+4 Yemen                          YE    YEM    2013 newr… f65   &lt;NA&gt;     360
+5 Zambia                         ZM    ZMB    2013 newr… f65   &lt;NA&gt;     669
+6 Zimbabwe                       ZW    ZWE    2013 newr… f65   &lt;NA&gt;     725</code></pre>
+<ol style="list-style-type: decimal">
+<li>I claimed that <code>iso2</code> and <code>iso3</code> were redundant with <code>country</code>. Confirm this claim.</li>
+</ol>
+<pre class="r"><code>who %&gt;%
+  group_by(country) %&gt;%
+  summarize(n_iso2 = n_distinct(iso2),
+            n_iso3 = n_distinct(iso3)) %&gt;%
+  {stopifnot(.$n_iso2 == 1, .$n_iso3 == 1)}
+# Note: need to surround last expression in {} because this prevents . from
+# being passed as the first argument to stopifnot(), which obviously causes a
+# failure since a tibble does not evaluate to TRUE
+# https://stackoverflow.com/a/42386886/2483477</code></pre>
+<ol style="list-style-type: decimal">
+<li>For each country, year, and sex compute the total number of cases of TB. Make an informative visualisation of the data.</li>
+</ol>
+<pre class="r"><code>tidywho %&gt;%
+  group_by(country, year, sex) %&gt;%
+  summarize(total_cases = sum(value)) %&gt;%
+  ggplot(aes(x = year, y = total_cases)) +
+  geom_point(aes(color = country)) +
+  geom_smooth() +
+  facet_wrap(~sex) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<pre><code>`geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+<p><img src="figure/09-tidyr.Rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.1 (2019-07-05)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 18.04.3 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/atlas/libblas.so.3.10.3
+LAPACK: /usr/lib/x86_64-linux-gnu/atlas/liblapack.so.3.10.3
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] forcats_0.4.0   stringr_1.4.0   dplyr_0.8.3     purrr_0.3.2    
+[5] readr_1.3.1     tidyr_1.0.0     tibble_2.1.3    ggplot2_3.2.1  
+[9] tidyverse_1.2.1
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_0.2.5     xfun_0.10            splines_3.6.1       
+ [4] haven_2.1.1          lattice_0.20-38      colorspace_1.4-1    
+ [7] vctrs_0.2.0          generics_0.0.2       htmltools_0.4.0     
+[10] mgcv_1.8-29          yaml_2.2.0           utf8_1.1.4          
+[13] rlang_0.4.0          pillar_1.4.2         glue_1.3.1          
+[16] withr_2.1.2          modelr_0.1.5         readxl_1.3.1        
+[19] lifecycle_0.1.0      munsell_0.5.0        gtable_0.3.0        
+[22] workflowr_1.4.0.9001 cellranger_1.1.0     rvest_0.3.4         
+[25] evaluate_0.14        labeling_0.3         knitr_1.25          
+[28] fansi_0.4.0          broom_0.5.2          Rcpp_1.0.2          
+[31] scales_1.0.0         backports_1.1.5      jsonlite_1.6        
+[34] fs_1.3.1             hms_0.5.1            digest_0.6.21       
+[37] stringi_1.4.3        grid_3.6.1           rprojroot_1.2       
+[40] cli_1.1.0            tools_3.6.1          magrittr_1.5        
+[43] lazyeval_0.2.2       crayon_1.3.4         whisker_0.4         
+[46] pkgconfig_2.0.3      zeallot_0.1.0        Matrix_1.2-17       
+[49] ellipsis_0.3.0       xml2_1.2.2           lubridate_1.7.4     
+[52] assertthat_0.2.1     rmarkdown_1.15       httr_1.4.1          
+[55] rstudioapi_0.10      R6_2.4.0             nlme_3.1-141        
+[58] git2r_0.26.1.9000    compiler_3.6.1      </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
