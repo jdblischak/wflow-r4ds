@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="John Blischak" />
+
+<meta name="date" content="2019-10-15" />
+
+<title>Relational data with dplyr</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">wflow-r4ds</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/jdblischak/wflow-r4ds">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Relational data with dplyr</h1>
+<h4 class="author">John Blischak</h4>
+<h4 class="date">2019-10-15</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2019-10-15
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>wflow-r4ds/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.4.0.9001). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20190925code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20190925)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20190925code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20190925)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjdblischakwflowr4dstreed52ec51e1a091c240a05a1d6ec17a4abd83871cctargetblankd52ec51a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jdblischak/wflow-r4ds/tree/d52ec51e1a091c240a05a1d6ec17a4abd83871cc" target="_blank">d52ec51</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjdblischakwflowr4dstreed52ec51e1a091c240a05a1d6ec17a4abd83871cctargetblankd52ec51a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the R Markdown and HTML files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view them.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jdblischak/wflow-r4ds/blob/d52ec51e1a091c240a05a1d6ec17a4abd83871cc/analysis/10-relational-data.Rmd" target="_blank">d52ec51</a>
+</td>
+<td>
+John Blischak
+</td>
+<td>
+2019-10-16
+</td>
+<td>
+Chapter 10 exercises on relational data with dplyr
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<ul>
+<li><a href="https://r4ds.had.co.nz/relational-data.html">Book chapter</a></li>
+<li><a href="https://github.com/hadley/r4ds/blob/master/relational-data.Rmd">Source</a></li>
+</ul>
+<div id="setup" class="section level2">
+<h2>Setup</h2>
+<pre class="r"><code>library(tidyverse)
+library(nycflights13)
+library(Lahman)
+library(babynames)
+library(nasaweather)
+library(fueleconomy)</code></pre>
+</div>
+<div id="nycflights13" class="section level2">
+<h2>nycflights13</h2>
+<p>p. 174</p>
+<ol style="list-style-type: decimal">
+<li>Imagine you wanted to draw (approximately) the route each plane flies from its origin to its destination. What variables would you need? What tables would you need to combine?</li>
+</ol>
+<p>I would need the variables <code>origin</code> and <code>dest</code> from <code>flights</code> and would need to combine these with the <code>lat</code> and <code>lon</code> from <code>airports</code>.</p>
+<ol style="list-style-type: decimal">
+<li>I forgot to draw the relationship between <code>weather</code> and <code>airports</code>. What is the relationship and how should it appear in the diagram?</li>
+</ol>
+<p>The variable <code>origin</code> in <code>weather</code> corresponds to the variable <code>faa</code> in <code>airports</code>.</p>
+<ol style="list-style-type: decimal">
+<li><code>weather</code> only contains information for the origin (NYC) airports. If it contained weather records for all airports in the USA, what additional relation would it define with <code>flights</code>?</li>
+</ol>
+<p>It would also define a relation with <code>dest</code>.</p>
+<ol style="list-style-type: decimal">
+<li>We know that some days of the year are “special”, and fewer people than usual fly on them. How might you represent that data as a data frame? What would be the primary keys of that table? How would it connect to the existing tables?</li>
+</ol>
+<p>I could create a table <code>special</code> that contained the variables <code>name</code>, <code>month</code>, and <code>day</code> for each “special” day of the year. The variables <code>month</code> and <code>day</code> would connect to the variables of the same name in <code>flights</code> and <code>weather</code>.</p>
+</div>
+<div id="keys" class="section level2">
+<h2>Keys</h2>
+<p>p. 177</p>
+<ol style="list-style-type: decimal">
+<li>Add a surrogate key to <code>flights</code>.</li>
+</ol>
+<pre class="r"><code>flights %&gt;%
+  mutate(surrogate = row_number()) %&gt;%
+  select(surrogate, everything())</code></pre>
+<pre><code># A tibble: 336,776 x 20
+   surrogate  year month   day dep_time sched_dep_time dep_delay arr_time
+       &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;
+ 1         1  2013     1     1      517            515         2      830
+ 2         2  2013     1     1      533            529         4      850
+ 3         3  2013     1     1      542            540         2      923
+ 4         4  2013     1     1      544            545        -1     1004
+ 5         5  2013     1     1      554            600        -6      812
+ 6         6  2013     1     1      554            558        -4      740
+ 7         7  2013     1     1      555            600        -5      913
+ 8         8  2013     1     1      557            600        -3      709
+ 9         9  2013     1     1      557            600        -3      838
+10        10  2013     1     1      558            600        -2      753
+# … with 336,766 more rows, and 12 more variables: sched_arr_time &lt;int&gt;,
+#   arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;,
+#   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+#   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
+<ol style="list-style-type: decimal">
+<li><p>Identify the keys in the following datasets</p>
+<ol style="list-style-type: decimal">
+<li><code>Lahman::Batting</code>,</li>
+<li><code>babynames::babynames</code></li>
+<li><code>nasaweather::atmos</code></li>
+<li><code>fueleconomy::vehicles</code></li>
+<li><code>ggplot2::diamonds</code></li>
+</ol>
+<p>(You might need to install some packages and read some documentation.)</p></li>
+</ol>
+<pre class="r"><code>head(Lahman::Batting)</code></pre>
+<pre><code>   playerID yearID stint teamID lgID  G  AB  R  H X2B X3B HR RBI SB CS BB
+1 abercda01   1871     1    TRO   NA  1   4  0  0   0   0  0   0  0  0  0
+2  addybo01   1871     1    RC1   NA 25 118 30 32   6   0  0  13  8  1  4
+3 allisar01   1871     1    CL1   NA 29 137 28 40   4   5  0  19  3  1  2
+4 allisdo01   1871     1    WS3   NA 27 133 28 44  10   2  2  27  1  1  0
+5 ansonca01   1871     1    RC1   NA 25 120 29 39  11   3  0  16  6  2  2
+6 armstbo01   1871     1    FW1   NA 12  49  9 11   2   1  0   5  0  1  0
+  SO IBB HBP SH SF GIDP
+1  0  NA  NA NA NA    0
+2  0  NA  NA NA NA    0
+3  5  NA  NA NA NA    1
+4  2  NA  NA NA NA    0
+5  1  NA  NA NA NA    0
+6  1  NA  NA NA NA    0</code></pre>
+<pre class="r"><code>?Lahman::Batting
+# playerID, yearID, stint
+Lahman::Batting %&gt;%
+  count(playerID, yearID, stint) %&gt;%
+  filter(n &gt; 1)</code></pre>
+<pre><code># A tibble: 0 x 4
+# … with 4 variables: playerID &lt;chr&gt;, yearID &lt;int&gt;, stint &lt;int&gt;, n &lt;int&gt;</code></pre>
+<pre class="r"><code>babynames::babynames</code></pre>
+<pre><code># A tibble: 1,924,665 x 5
+    year sex   name          n   prop
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;int&gt;  &lt;dbl&gt;
+ 1  1880 F     Mary       7065 0.0724
+ 2  1880 F     Anna       2604 0.0267
+ 3  1880 F     Emma       2003 0.0205
+ 4  1880 F     Elizabeth  1939 0.0199
+ 5  1880 F     Minnie     1746 0.0179
+ 6  1880 F     Margaret   1578 0.0162
+ 7  1880 F     Ida        1472 0.0151
+ 8  1880 F     Alice      1414 0.0145
+ 9  1880 F     Bertha     1320 0.0135
+10  1880 F     Sarah      1288 0.0132
+# … with 1,924,655 more rows</code></pre>
+<pre class="r"><code>?babynames::babynames
+# year, sex, name
+babynames::babynames %&gt;%
+  count(year, sex, name) %&gt;%
+  filter(n &gt; 1)</code></pre>
+<pre><code># A tibble: 0 x 4
+# … with 4 variables: year &lt;dbl&gt;, sex &lt;chr&gt;, name &lt;chr&gt;, n &lt;int&gt;</code></pre>
+<pre class="r"><code>nasaweather::atmos</code></pre>
+<pre><code># A tibble: 41,472 x 11
+     lat  long  year month surftemp  temp pressure ozone cloudlow cloudmid
+   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1  36.2 -114.  1995     1     273.  272.      835   304      7.5     34.5
+ 2  33.7 -114.  1995     1     280.  282.      940   304     11.5     32.5
+ 3  31.2 -114.  1995     1     285.  285.      960   298     16.5     26  
+ 4  28.7 -114.  1995     1     289.  291.      990   276     20.5     14.5
+ 5  26.2 -114.  1995     1     292.  293.     1000   274     26       10.5
+ 6  23.7 -114.  1995     1     294.  294.     1000   264     30        9.5
+ 7  21.2 -114.  1995     1     295   295.     1000   258     29.5     11  
+ 8  18.7 -114.  1995     1     298.  297.     1000   252     26.5     17.5
+ 9  16.2 -114.  1995     1     300.  298.     1000   250     27.5     18.5
+10  13.7 -114.  1995     1     300.  299.     1000   250     26       16.5
+# … with 41,462 more rows, and 1 more variable: cloudhigh &lt;dbl&gt;</code></pre>
+<pre class="r"><code>?nasaweather::atmos
+# lat, long, year, month
+nasaweather::atmos %&gt;%
+  count(lat, long, year, month) %&gt;%
+  filter(n &gt; 1)</code></pre>
+<pre><code># A tibble: 0 x 5
+# … with 5 variables: lat &lt;dbl&gt;, long &lt;dbl&gt;, year &lt;int&gt;, month &lt;int&gt;,
+#   n &lt;int&gt;</code></pre>
+<pre class="r"><code>fueleconomy::vehicles</code></pre>
+<pre><code># A tibble: 33,442 x 12
+      id make   model  year class trans drive   cyl displ fuel    hwy   cty
+   &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt;
+ 1 27550 AM Ge… DJ P…  1984 Spec… Auto… 2-Wh…     4   2.5 Regu…    17    18
+ 2 28426 AM Ge… DJ P…  1984 Spec… Auto… 2-Wh…     4   2.5 Regu…    17    18
+ 3 27549 AM Ge… FJ8c…  1984 Spec… Auto… 2-Wh…     6   4.2 Regu…    13    13
+ 4 28425 AM Ge… FJ8c…  1984 Spec… Auto… 2-Wh…     6   4.2 Regu…    13    13
+ 5  1032 AM Ge… Post…  1985 Spec… Auto… Rear…     4   2.5 Regu…    17    16
+ 6  1033 AM Ge… Post…  1985 Spec… Auto… Rear…     6   4.2 Regu…    13    13
+ 7  3347 ASC I… GNX    1987 Mids… Auto… Rear…     6   3.8 Prem…    21    14
+ 8 13309 Acura  2.2C…  1997 Subc… Auto… Fron…     4   2.2 Regu…    26    20
+ 9 13310 Acura  2.2C…  1997 Subc… Manu… Fron…     4   2.2 Regu…    28    22
+10 13311 Acura  2.2C…  1997 Subc… Auto… Fron…     6   3   Regu…    26    18
+# … with 33,432 more rows</code></pre>
+<pre class="r"><code>?fueleconomy::vehicles
+# id
+fueleconomy::vehicles %&gt;%
+  count(id) %&gt;%
+  filter(n &gt; 1)</code></pre>
+<pre><code># A tibble: 0 x 2
+# … with 2 variables: id &lt;int&gt;, n &lt;int&gt;</code></pre>
+<pre class="r"><code>ggplot2::diamonds</code></pre>
+<pre><code># A tibble: 53,940 x 10
+   carat cut       color clarity depth table price     x     y     z
+   &lt;dbl&gt; &lt;ord&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1 0.23  Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43
+ 2 0.21  Premium   E     SI1      59.8    61   326  3.89  3.84  2.31
+ 3 0.23  Good      E     VS1      56.9    65   327  4.05  4.07  2.31
+ 4 0.290 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63
+ 5 0.31  Good      J     SI2      63.3    58   335  4.34  4.35  2.75
+ 6 0.24  Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48
+ 7 0.24  Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47
+ 8 0.26  Very Good H     SI1      61.9    55   337  4.07  4.11  2.53
+ 9 0.22  Fair      E     VS2      65.1    61   337  3.87  3.78  2.49
+10 0.23  Very Good H     VS1      59.4    61   338  4     4.05  2.39
+# … with 53,930 more rows</code></pre>
+<pre class="r"><code>?ggplot2::diamonds
+# none
+ggplot2::diamonds %&gt;%
+  select_if(is.factor) %&gt;%
+  count(cut, color, clarity) %&gt;%
+  filter(n &gt; 1)</code></pre>
+<pre><code># A tibble: 271 x 4
+   cut   color clarity     n
+   &lt;ord&gt; &lt;ord&gt; &lt;ord&gt;   &lt;int&gt;
+ 1 Fair  D     I1          4
+ 2 Fair  D     SI2        56
+ 3 Fair  D     SI1        58
+ 4 Fair  D     VS2        25
+ 5 Fair  D     VS1         5
+ 6 Fair  D     VVS2        9
+ 7 Fair  D     VVS1        3
+ 8 Fair  D     IF          3
+ 9 Fair  E     I1          9
+10 Fair  E     SI2        78
+# … with 261 more rows</code></pre>
+<ol style="list-style-type: decimal">
+<li><p>Draw a diagram illustrating the connections between the <code>Batting</code>, <code>Master</code>, and <code>Salaries</code> tables in the Lahman package. Draw another diagram that shows the relationship between <code>Master</code>, <code>Managers</code>, <code>AwardsManagers</code>.</p>
+<p>How would you characterise the relationship between the <code>Batting</code>, <code>Pitching</code>, and <code>Fielding</code> tables?</p></li>
+</ol>
+</div>
+<div id="mutating-joins" class="section level2">
+<h2>Mutating joins</h2>
+<p>p. 186</p>
+<ol style="list-style-type: decimal">
+<li><p>Compute the average delay by destination, then join on the <code>airports</code> data frame so you can show the spatial distribution of delays. Here’s an easy way to draw a map of the United States:</p>
+<pre class="r"><code>airports %&gt;%
+  semi_join(flights, c(&quot;faa&quot; = &quot;dest&quot;)) %&gt;%
+  ggplot(aes(lon, lat)) +
+    borders(&quot;state&quot;) +
+    geom_point() +
+    coord_quickmap()</code></pre>
+<p><img src="figure/10-relational-data.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>(Don’t worry if you don’t understand what <code>semi_join()</code> does — you’ll learn about it next.)</p>
+<p>You might want to use the <code>size</code> or <code>colour</code> of the points to display the average delay for each airport.</p></li>
+</ol>
+<pre class="r"><code>flights %&gt;%
+  group_by(dest) %&gt;%
+  summarize(avg_delay = mean(arr_delay, na.rm = TRUE)) %&gt;%
+  left_join(airports, c(&quot;dest&quot; = &quot;faa&quot;)) %&gt;%
+  ggplot(aes(lon, lat)) +
+  borders(&quot;state&quot;) +
+  geom_point(aes(color = avg_delay)) +
+  coord_quickmap()</code></pre>
+<pre><code>Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
+<p><img src="figure/10-relational-data.Rmd/delay-by-dest-map-1.png" width="672" style="display: block; margin: auto;" /></p>
+<ol style="list-style-type: decimal">
+<li>Add the location of the origin <em>and</em> destination (i.e. the <code>lat</code> and <code>lon</code>) to <code>flights</code>.</li>
+</ol>
+<pre class="r"><code>flights %&gt;%
+  left_join(airports, by = c(&quot;origin&quot; = &quot;faa&quot;)) %&gt;%
+  left_join(airports, by = c(&quot;dest&quot; = &quot;faa&quot;), suffix = c(&quot;.origin&quot;, &quot;.dest&quot;)) %&gt;%
+  select(contains(&quot;origin&quot;), contains(&quot;dest&quot;))</code></pre>
+<pre><code># A tibble: 336,776 x 16
+   origin name.origin lat.origin lon.origin alt.origin tz.origin dst.origin
+   &lt;chr&gt;  &lt;chr&gt;            &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;     
+ 1 EWR    Newark Lib…       40.7      -74.2         18        -5 A         
+ 2 LGA    La Guardia        40.8      -73.9         22        -5 A         
+ 3 JFK    John F Ken…       40.6      -73.8         13        -5 A         
+ 4 JFK    John F Ken…       40.6      -73.8         13        -5 A         
+ 5 LGA    La Guardia        40.8      -73.9         22        -5 A         
+ 6 EWR    Newark Lib…       40.7      -74.2         18        -5 A         
+ 7 EWR    Newark Lib…       40.7      -74.2         18        -5 A         
+ 8 LGA    La Guardia        40.8      -73.9         22        -5 A         
+ 9 JFK    John F Ken…       40.6      -73.8         13        -5 A         
+10 LGA    La Guardia        40.8      -73.9         22        -5 A         
+# … with 336,766 more rows, and 9 more variables: tzone.origin &lt;chr&gt;,
+#   dest &lt;chr&gt;, name.dest &lt;chr&gt;, lat.dest &lt;dbl&gt;, lon.dest &lt;dbl&gt;,
+#   alt.dest &lt;dbl&gt;, tz.dest &lt;dbl&gt;, dst.dest &lt;chr&gt;, tzone.dest &lt;chr&gt;</code></pre>
+<ol style="list-style-type: decimal">
+<li>Is there a relationship between the age of a plane and its delays?</li>
+</ol>
+<pre class="r"><code>age_delay &lt;- flights %&gt;%
+  left_join(planes, by = &quot;tailnum&quot;, suffix = c(&quot;.flight&quot;, &quot;.plane&quot;))
+ggplot(age_delay, aes(x = year.plane, y = arr_delay)) +
+  geom_point() +
+  geom_smooth()</code></pre>
+<pre><code>`geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+<pre><code>Warning: Removed 62923 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>Warning: Removed 62923 rows containing missing values (geom_point).</code></pre>
+<p><img src="figure/10-relational-data.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>lm(arr_delay ~ year.plane, data = age_delay)</code></pre>
+<pre><code>
+Call:
+lm(formula = arr_delay ~ year.plane, data = age_delay)
+
+Coefficients:
+(Intercept)   year.plane  
+   -241.146        0.124  </code></pre>
+<ol style="list-style-type: decimal">
+<li>What weather conditions make it more likely to see a delay?</li>
+</ol>
+<pre class="r"><code>flights_weather &lt;- flights %&gt;%
+  left_join(weather)</code></pre>
+<pre><code>Joining, by = c(&quot;year&quot;, &quot;month&quot;, &quot;day&quot;, &quot;origin&quot;, &quot;hour&quot;, &quot;time_hour&quot;)</code></pre>
+<pre class="r"><code>lm(arr_delay ~ dewp + humid + wind_dir + wind_speed + wind_gust + precip + pressure + visib,
+   data = flights_weather)</code></pre>
+<pre><code>
+Call:
+lm(formula = arr_delay ~ dewp + humid + wind_dir + wind_speed + 
+    wind_gust + precip + pressure + visib, data = flights_weather)
+
+Coefficients:
+(Intercept)         dewp        humid     wind_dir   wind_speed  
+  312.60168      0.11076      0.16065     -0.01406     -0.11834  
+  wind_gust       precip     pressure        visib  
+    0.39140     -7.99512     -0.28396     -3.29139  </code></pre>
+<ol style="list-style-type: decimal">
+<li>What happened on June 13 2013? Display the spatial pattern of delays, and then use Google to cross-reference with the weather.</li>
+</ol>
+<pre class="r"><code>weather %&gt;%
+  filter(year == 2013, month == 6, day == 13)</code></pre>
+<pre><code># A tibble: 72 x 15
+   origin  year month   day  hour  temp  dewp humid wind_dir wind_speed
+   &lt;chr&gt;  &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+ 1 EWR     2013     6    13     0  68    55.0  63.2      240       4.60
+ 2 EWR     2013     6    13     1  68    54.0  60.8        0       0   
+ 3 EWR     2013     6    13     2  66.9  55.9  67.8      160       4.60
+ 4 EWR     2013     6    13     3  64.9  57.0  75.5      220       5.75
+ 5 EWR     2013     6    13     4  66.9  57.0  70.5        0       0   
+ 6 EWR     2013     6    13     5  66.9  57.0  70.5      220       4.60
+ 7 EWR     2013     6    13     6  66.9  57.9  72.8      140       3.45
+ 8 EWR     2013     6    13     7  66.9  57.9  72.8      120       6.90
+ 9 EWR     2013     6    13     8  66.9  59    75.7      110       4.60
+10 EWR     2013     6    13     9  66.2  61.0  83.8       NA      10.4 
+# … with 62 more rows, and 5 more variables: wind_gust &lt;dbl&gt;,
+#   precip &lt;dbl&gt;, pressure &lt;dbl&gt;, visib &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
+<pre class="r"><code>flights %&gt;%
+  filter(year == 2013, month == 6, day == 13) %&gt;%
+  group_by(dest) %&gt;%
+  summarize(avg_delay = mean(arr_delay, na.rm = TRUE)) %&gt;%
+  left_join(airports, c(&quot;dest&quot; = &quot;faa&quot;)) %&gt;%
+  ggplot(aes(lon, lat)) +
+  borders(&quot;state&quot;) +
+  geom_point(aes(color = avg_delay)) +
+  coord_quickmap()</code></pre>
+<pre><code>Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
+<p><img src="figure/10-relational-data.Rmd/2013-06-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><a href="https://en.wikipedia.org/wiki/June_12%E2%80%9313,_2013_derecho_series" class="uri">https://en.wikipedia.org/wiki/June_12%E2%80%9313,_2013_derecho_series</a></p>
+</div>
+<div id="filtering-joins" class="section level2">
+<h2>Filtering joins</h2>
+<p>p. 191</p>
+<ol style="list-style-type: decimal">
+<li>What does it mean for a flight to have a missing <code>tailnum</code>? What do the tail numbers that don’t have a matching record in <code>planes</code> have in common? (Hint: one variable explains ~90% of the problems.)</li>
+</ol>
+<p>Not sure</p>
+<pre class="r"><code>flights %&gt;%
+  anti_join(planes, by = &quot;tailnum&quot;)</code></pre>
+<pre><code># A tibble: 52,606 x 19
+    year month   day dep_time sched_dep_time dep_delay arr_time
+   &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;
+ 1  2013     1     1      558            600        -2      753
+ 2  2013     1     1      559            600        -1      941
+ 3  2013     1     1      600            600         0      837
+ 4  2013     1     1      602            605        -3      821
+ 5  2013     1     1      608            600         8      807
+ 6  2013     1     1      611            600        11      945
+ 7  2013     1     1      623            610        13      920
+ 8  2013     1     1      624            630        -6      840
+ 9  2013     1     1      628            630        -2     1137
+10  2013     1     1      629            630        -1      824
+# … with 52,596 more rows, and 12 more variables: sched_arr_time &lt;int&gt;,
+#   arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;,
+#   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+#   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
+<pre class="r"><code>flights %&gt;%
+  anti_join(planes, by = &quot;tailnum&quot;) %&gt;%
+  filter(nchar(tailnum) == 6)</code></pre>
+<pre><code># A tibble: 50,094 x 19
+    year month   day dep_time sched_dep_time dep_delay arr_time
+   &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;
+ 1  2013     1     1      558            600        -2      753
+ 2  2013     1     1      559            600        -1      941
+ 3  2013     1     1      600            600         0      837
+ 4  2013     1     1      602            605        -3      821
+ 5  2013     1     1      608            600         8      807
+ 6  2013     1     1      611            600        11      945
+ 7  2013     1     1      623            610        13      920
+ 8  2013     1     1      624            630        -6      840
+ 9  2013     1     1      628            630        -2     1137
+10  2013     1     1      629            630        -1      824
+# … with 50,084 more rows, and 12 more variables: sched_arr_time &lt;int&gt;,
+#   arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;,
+#   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+#   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
+<pre class="r"><code>flights %&gt;%
+  semi_join(planes, by = &quot;tailnum&quot;) %&gt;%
+  filter(nchar(tailnum) == 5)</code></pre>
+<pre><code># A tibble: 1,597 x 19
+    year month   day dep_time sched_dep_time dep_delay arr_time
+   &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;
+ 1  2013     1     1     1621           1548        33     1904
+ 2  2013     1     2      729            730        -1     1011
+ 3  2013     1     2     1902           1905        -3     2203
+ 4  2013     1     3     1058           1100        -2     1346
+ 5  2013     1     3     1123           1125        -2     1603
+ 6  2013     1     3     1604           1600         4     1917
+ 7  2013     1     3     1700           1700         0     2141
+ 8  2013     1     3     1920           1920         0     2158
+ 9  2013     1     3     1928           1835        53     2220
+10  2013     1     4     1055           1100        -5     1350
+# … with 1,587 more rows, and 12 more variables: sched_arr_time &lt;int&gt;,
+#   arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;,
+#   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+#   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
+<ol style="list-style-type: decimal">
+<li>Filter flights to only show flights with planes that have flown at least 100 flights.</li>
+</ol>
+<pre class="r"><code>planes_at_least_100 &lt;- flights %&gt;%
+  group_by(tailnum) %&gt;%
+  summarize(n_flights = n()) %&gt;%
+  filter(n_flights &gt;= 100)
+flights_at_least_100 &lt;- flights %&gt;%
+  semi_join(planes_at_least_100, by = &quot;tailnum&quot;)
+dim(flights_at_least_100)</code></pre>
+<pre><code>[1] 230902     19</code></pre>
+<ol style="list-style-type: decimal">
+<li>Combine <code>fueleconomy::vehicles</code> and <code>fueleconomy::common</code> to find only the records for the most common models.</li>
+</ol>
+<pre class="r"><code>fueleconomy::vehicles %&gt;%
+  semi_join(fueleconomy::common)</code></pre>
+<pre><code>Warning: Detecting old grouped_df format, replacing `vars` attribute by
+`groups`</code></pre>
+<pre><code>Joining, by = c(&quot;make&quot;, &quot;model&quot;)</code></pre>
+<pre><code># A tibble: 14,531 x 12
+      id make  model   year class trans drive   cyl displ fuel    hwy   cty
+   &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;dbl&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt;
+ 1  1833 Acura Integ…  1986 Subc… Auto… Fron…     4   1.6 Regu…    28    22
+ 2  1834 Acura Integ…  1986 Subc… Manu… Fron…     4   1.6 Regu…    28    23
+ 3  3037 Acura Integ…  1987 Subc… Auto… Fron…     4   1.6 Regu…    28    22
+ 4  3038 Acura Integ…  1987 Subc… Manu… Fron…     4   1.6 Regu…    28    23
+ 5  4183 Acura Integ…  1988 Subc… Auto… Fron…     4   1.6 Regu…    27    22
+ 6  4184 Acura Integ…  1988 Subc… Manu… Fron…     4   1.6 Regu…    28    23
+ 7  5303 Acura Integ…  1989 Subc… Auto… Fron…     4   1.6 Regu…    27    22
+ 8  5304 Acura Integ…  1989 Subc… Manu… Fron…     4   1.6 Regu…    28    23
+ 9  6442 Acura Integ…  1990 Subc… Auto… Fron…     4   1.8 Regu…    24    20
+10  6443 Acura Integ…  1990 Subc… Manu… Fron…     4   1.8 Regu…    26    21
+# … with 14,521 more rows</code></pre>
+<ol style="list-style-type: decimal">
+<li><p>Find the 48 hours (over the course of the whole year) that have the worst delays. Cross-reference it with the <code>weather</code> data. Can you see any patterns?</p></li>
+<li><p>What does <code>anti_join(flights, airports, by = c(&quot;dest&quot; = &quot;faa&quot;))</code> tell you? What does <code>anti_join(airports, flights, by = c(&quot;faa&quot; = &quot;dest&quot;))</code> tell you?</p></li>
+</ol>
+<p><code>anti_join(flights, airports, by = c(&quot;dest&quot; = &quot;faa&quot;))</code> tells you the flights with a destination that isn’t recorded in <code>airports</code>.</p>
+<pre class="r"><code>anti_join(flights, airports, by = c(&quot;dest&quot; = &quot;faa&quot;))</code></pre>
+<pre><code># A tibble: 7,602 x 19
+    year month   day dep_time sched_dep_time dep_delay arr_time
+   &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;
+ 1  2013     1     1      544            545        -1     1004
+ 2  2013     1     1      615            615         0     1039
+ 3  2013     1     1      628            630        -2     1137
+ 4  2013     1     1      701            700         1     1123
+ 5  2013     1     1      711            715        -4     1151
+ 6  2013     1     1      820            820         0     1254
+ 7  2013     1     1      820            820         0     1249
+ 8  2013     1     1      840            845        -5     1311
+ 9  2013     1     1      909            810        59     1331
+10  2013     1     1      913            918        -5     1346
+# … with 7,592 more rows, and 12 more variables: sched_arr_time &lt;int&gt;,
+#   arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;,
+#   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+#   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
+<p><code>anti_join(airports, flights, by = c(&quot;faa&quot; = &quot;dest&quot;))</code> tells you the airports that were not flown to directly from NYC airports.</p>
+<ol style="list-style-type: decimal">
+<li>You might expect that there’s an implicit relationship between plane and airline, because each plane is flown by a single airline. Confirm or reject this hypothesis using the tools you’ve learned above.</li>
+</ol>
+<pre class="r"><code>flights %&gt;%
+  group_by(tailnum) %&gt;%
+  summarize(n_airlines = n_distinct(carrier)) %&gt;%
+  filter(n_airlines != 1)</code></pre>
+<pre><code># A tibble: 18 x 2
+   tailnum n_airlines
+   &lt;chr&gt;        &lt;int&gt;
+ 1 N146PQ           2
+ 2 N153PQ           2
+ 3 N176PQ           2
+ 4 N181PQ           2
+ 5 N197PQ           2
+ 6 N200PQ           2
+ 7 N228PQ           2
+ 8 N232PQ           2
+ 9 N933AT           2
+10 N935AT           2
+11 N977AT           2
+12 N978AT           2
+13 N979AT           2
+14 N981AT           2
+15 N989AT           2
+16 N990AT           2
+17 N994AT           2
+18 &lt;NA&gt;             7</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.1 (2019-07-05)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 18.04.3 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/atlas/libblas.so.3.10.3
+LAPACK: /usr/lib/x86_64-linux-gnu/atlas/liblapack.so.3.10.3
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] fueleconomy_0.1    nasaweather_0.1    babynames_1.0.0   
+ [4] Lahman_7.0-1       nycflights13_1.0.1 forcats_0.4.0     
+ [7] stringr_1.4.0      dplyr_0.8.3        purrr_0.3.2       
+[10] readr_1.3.1        tidyr_1.0.0        tibble_2.1.3      
+[13] ggplot2_3.2.1      tidyverse_1.2.1   
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_0.2.5     xfun_0.10            splines_3.6.1       
+ [4] haven_2.1.1          lattice_0.20-38      colorspace_1.4-1    
+ [7] vctrs_0.2.0          generics_0.0.2       htmltools_0.4.0     
+[10] mgcv_1.8-29          yaml_2.2.0           utf8_1.1.4          
+[13] rlang_0.4.0          pillar_1.4.2         glue_1.3.1          
+[16] withr_2.1.2          modelr_0.1.5         readxl_1.3.1        
+[19] lifecycle_0.1.0      munsell_0.5.0        gtable_0.3.0        
+[22] workflowr_1.4.0.9001 cellranger_1.1.0     rvest_0.3.4         
+[25] evaluate_0.14        labeling_0.3         knitr_1.25          
+[28] fansi_0.4.0          broom_0.5.2          Rcpp_1.0.2          
+[31] scales_1.0.0         backports_1.1.5      jsonlite_1.6        
+[34] fs_1.3.1             hms_0.5.1            digest_0.6.21       
+[37] stringi_1.4.3        grid_3.6.1           rprojroot_1.2       
+[40] cli_1.1.0            tools_3.6.1          maps_3.3.0          
+[43] magrittr_1.5         lazyeval_0.2.2       crayon_1.3.4        
+[46] whisker_0.4          pkgconfig_2.0.3      zeallot_0.1.0       
+[49] Matrix_1.2-17        xml2_1.2.2           lubridate_1.7.4     
+[52] assertthat_0.2.1     rmarkdown_1.15       httr_1.4.1          
+[55] rstudioapi_0.10      R6_2.4.0             nlme_3.1-141        
+[58] git2r_0.26.1.9000    compiler_3.6.1      </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
