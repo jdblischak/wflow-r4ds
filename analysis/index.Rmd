@@ -17,3 +17,4 @@ editor_options:
 1. [Tibbles with tibble](07-tibble.html)
 1. [Data import with readr](08-readr.html)
 1. [Tidy data with tidyr](09-tidyr.html)
+1. [Relational data with dplyr](10-relational-data.html)
